@@ -1,16 +1,12 @@
 import { useEffect, useId, useState } from "react";
-
+import { useLanguage } from "@/state/lang-provider";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-
-import { useLanguage } from "@/state/lang-provider";
-import { useTours } from "@/state/tours";
 
 export default function ToggleLanguage() {
   const { lang, setLang } = useLanguage();
   const [checked, setChecked] = useState(lang === "de" ? true : false);
   const id = useId();
-  // const { resetData } = !checked ? useDeTours() : useEnTours();
 
   const countries = [
     { value: "en", flag: "🇬🇧" },

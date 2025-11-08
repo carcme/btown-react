@@ -1,4 +1,3 @@
-import React from "react";
 import { Item, ItemContent, ItemMedia, ItemTitle } from "./ui/item";
 import {
   Accessibility,

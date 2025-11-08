@@ -87,7 +87,7 @@ export default function Header() {
             );
           })}
 
-          <ToggleDark className="py-8" />
+          <ToggleDark />
           <ToggleLanguage />
         </nav>
       </aside>

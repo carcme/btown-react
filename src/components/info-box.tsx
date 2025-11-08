@@ -1,5 +1,5 @@
 import type React from "react";
-import { MapPin, Clock, Phone, Globe, Euro, Search } from "lucide-react";
+import { MapPin, Clock, Phone, Euro, Search } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "@tanstack/react-router";
 import type { Attraction } from "@/state/tours";

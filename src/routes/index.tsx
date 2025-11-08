@@ -3,7 +3,6 @@ import { useLanguage } from "@/state/lang-provider";
 import { useTours } from "@/state/tours";
 import Header from "@/components/Header";
 
-import dummyWiki from "@/api/dummy.json";
 import { BERLIN_CENTER } from "@/data/maps/defaults";
 
 import Card from "@/components/Card";
@@ -21,7 +20,7 @@ function App() {
   const { data } = useTours();
   const tours = lang === "en" ? data?.en.tours : data?.de.tours;
 
-  const arr = Object.values(dummyWiki.query.pages);
+  // const arr = Object.values(dummyWiki.query.pages);
 
   const onMapReady = () => {
     console.log("MAP READY: ");

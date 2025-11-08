@@ -31,19 +31,9 @@ export const COLOURS = [
     color: "Electric Blue",
   },
   {
-    type: "secondary",
-    hex: "#FF007F",
-    color: "Hot Pink",
-  },
-  {
-    type: "caution",
-    hex: "#FFD600",
-    name: "Bright Yellow",
-  },
-  {
-    type: "culture",
-    hex: "#C2410C",
-    name: "Rust Orange",
+    type: "nature",
+    hex: "#10B981",
+    name: "Emerald",
   },
   {
     type: "food",
@@ -51,9 +41,19 @@ export const COLOURS = [
     name: "Amber",
   },
   {
-    type: "nature",
-    hex: "#10B981",
-    name: "Emerald",
+    type: "culture",
+    hex: "#C2410C",
+    name: "Rust Orange",
+  },
+  {
+    type: "caution",
+    hex: "#FFD600",
+    name: "Bright Yellow",
+  },
+  {
+    type: "secondary",
+    hex: "#FF007F",
+    color: "Hot Pink",
   },
   {
     type: "queer",

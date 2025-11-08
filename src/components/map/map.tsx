@@ -11,7 +11,7 @@ import {
   Circle,
 } from "react-leaflet";
 
-import L, {
+import {
   Popup as LeafletPopup,
   type ErrorEvent,
   type LocateOptions,
@@ -122,12 +122,12 @@ export function MapZoomControl({
       setUserPosition(location.latlng);
       setaccuracy(location.accuracy);
       setIsLocating(false);
-      // onLocationFound?.(location);
+      onLocationFound?.(location);
     });
     map.on("locationerror", (error: ErrorEvent) => {
       setUserPosition(null);
       setIsLocating(false);
-      // onLocationError?.(error);
+      onLocationError?.(error);
     });
   }
 
@@ -260,7 +260,6 @@ export function MapLookupButton({
 }: MapLookupButtonProps) {
   const [loading, setLoading] = useState(false);
   const [hasData, setHasData] = useState(displaying);
-  const [searchArea, setSearchArea] = useState<LatLngExpression | null>(null);
 
   const map = useMap();
 
@@ -282,7 +281,6 @@ export function MapLookupButton({
         const response = await fetch(url);
         const data = await response.json();
 
-        setSearchArea(map.getCenter());
         setHasData(true);
         if (onResult) onResult(data);
       } catch (error) {

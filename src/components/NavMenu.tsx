@@ -184,7 +184,7 @@ const NavMenu = ({
                   <Menu className="size-4" />
                 </Button>
               </SheetTrigger>
-              <SheetContent position="left" className="overflow-y-auto">
+              <SheetContent side="left" className="overflow-y-auto">
                 <SheetHeader>
                   <SheetTitle>
                     {/* <a href={logo.url} className="flex items-center gap-2">

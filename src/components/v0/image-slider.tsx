@@ -30,8 +30,6 @@ interface ImageSliderProps {
 export function ImageSlider({
   images = stock,
   className,
-  containerClassName = "",
-  imageClassName = "",
   buttonClassName,
   indicatorClassName,
   children,
