@@ -1,0 +1,113 @@
+{
+    "batchcomplete": "",
+    "query": {
+        "pages": {
+            "1301540": {
+                "pageid": 1301540,
+                "ns": 0,
+                "title": "Natural History Museum, Berlin",
+                "index": -1,
+                "extract": "The Natural History Museum (German: Museum f\u00fcr Naturkunde) is a natural history museum located in Berlin, Germany. It exhibits a vast range of specimens from various segments of natural history and in such domain it is one of three major museums in Germany alongside Naturmuseum Senckenberg in Frankfurt and Museum Koenig in Bonn.\nThe museum houses more than 30 million zoological, paleontological, and mineralogical specimens, including more than ten thousand type specimens. It is famous for two exhibits: the largest mounted dinosaur in the world (a Giraffatitan skeleton), and a well-preserved specimen of the earliest known bird, Archaeopteryx. The museum's mineral collections date back to the Prussian Academy of Sciences of 1700. Important historic zoological specimens include those recovered by the German deep-sea Valdiva expedition (1898\u201399), the German Southpolar Expedition (1901\u201303), and the German Sunda Expedition (1929\u201331). Expeditions to fossil beds in Tendaguru in former Deutsch Ostafrika (today Tanzania) unearthed rich paleontological treasures. The collections are so extensive that less than 1 in 5000 specimens is exhibited, and they attract researchers from around the world. Additional exhibits include a mineral collection representing 75% of the minerals in the world, a large meteor collection, the largest piece of amber in the world; exhibits of the now-extinct quagga, huia, and tasmanian tiger, and \"Bobby\" the gorilla, a Berlin Zoo celebrity from the 1920s and 1930s.\nIn November 2018 the German government and the city of Berlin decided to expand and improve the building for more than \u20ac600 million.",
+                "coordinates": [
+                    {
+                        "lat": 52.53,
+                        "lon": 13.37944444,
+                        "primary": "",
+                        "dim": "1000",
+                        "globe": "earth",
+                        "dist": 343.5
+                    }
+                ],
+                "terms": {
+                    "description": [
+                        "natural history museum in Berlin, Germany"
+                    ]
+                },
+                "thumbnail": {
+                    "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Berlin%2C_Mitte%2C_Invalidenstrasse_43%2C_Museum_f%C3%BCr_Naturkunde.jpg/960px-Berlin%2C_Mitte%2C_Invalidenstrasse_43%2C_Museum_f%C3%BCr_Naturkunde.jpg",
+                    "width": 960,
+                    "height": 627
+                }
+            },
+            "2559577": {
+                "pageid": 2559577,
+                "ns": 0,
+                "title": "Charit\u00e9",
+                "index": 0,
+                "extract": "The Charit\u00e9 \u2013 Universit\u00e4tsmedizin Berlin (Charit\u00e9 \u2013 Berlin University Medicine; French: [\u0283a\u0281ite] ) is Europe's largest university hospital, affiliated with Humboldt University and the Free University of Berlin. \nThe Charit\u00e9 traces its origins to 1710. The complex is spread over four campuses and comprises around 3,000 beds, 15,500 staff, 8,000 students, and more than 60 operating theaters, and has a turnover of two billion euros annually.\nThe modern history of medicine has been significantly influenced by scientists who worked at the Charit\u00e9. Rudolf Virchow was the founder of cellular pathology, while Robert Koch developed vaccines for anthrax, cholera, and tuberculosis. For his life's work Koch is seen as one of the founders of modern medicine. More than half of all German Nobel Prize winners in Physiology or Medicine, including Emil von Behring, Robert Koch, and Paul Ehrlich, have worked at the Charit\u00e9. \nIn 2010\u20132011 the medical schools of Humboldt University and Freie Universit\u00e4t Berlin were united under the roof of the Charit\u00e9. The admission rate of the reorganized medical school was 3.9% for the 2019\u20132020 academic year.",
+                "coordinates": [
+                    {
+                        "lat": 52.52666667,
+                        "lon": 13.37972222,
+                        "primary": "",
+                        "type": "landmark",
+                        "dim": "1000",
+                        "globe": "earth",
+                        "dist": 106.3
+                    }
+                ],
+                "terms": {
+                    "description": [
+                        "university hospital in Berlin, Germany"
+                    ]
+                },
+                "thumbnail": {
+                    "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Logo_Charite.svg/960px-Logo_Charite.svg.png",
+                    "width": 960,
+                    "height": 354
+                }
+            },
+            "4165733": {
+                "pageid": 4165733,
+                "ns": 0,
+                "title": "Deutsches Theater (Berlin)",
+                "index": 1,
+                "extract": "The Deutsches Theater is a theater in Berlin, Germany. It was built in 1850 as Friedrich-Wilhelm-St\u00e4dtisches Theater, after Frederick William IV of Prussia. Located on Schumann Street (Schumannstra\u00dfe), the Deutsches Theater consists of two adjoining stages that share a common, classical facade. The main stage was built in 1850, originally for operettas.\nAdolf L'Arronge founded the Deutsches Theater in 1883 with the ambition of providing Berliners with a high-quality ensemble-based repertory company on the model of the German court theater, the Meiningen Ensemble, which had been developed by Georg II, Duke of Saxe-Meiningen and his colleagues to become \"the most widely admired and imitated company in Europe\", thanks to its historically accurate sets and costumes, vividly-realized crowd scenes, and meticulous directorial control.\nOtto Brahm, the leading exponent of theatrical Naturalism in Germany, took over the direction of the theater in 1894, and applied that approach to a combination of classical productions and stagings of the work of the new realistic playwrights.\nOne of Brahm's ensemble, the legendary theater director Max Reinhardt, took over the directorship in 1904. Under his leadership, it acquired a reputation as one of the most significant theaters in the world. In 1905, he founded a theater school and built a chamber theater. Reinhardt remained the artistic director of the theater until he fled Nazi Germany in 1933.\nThe Deutsches Theater remains one of the most prominent companies in Berlin.",
+                "coordinates": [
+                    {
+                        "lat": 52.52444444,
+                        "lon": 13.38222222,
+                        "primary": "",
+                        "type": "landmark",
+                        "dim": "1000",
+                        "globe": "earth",
+                        "dist": 391
+                    }
+                ],
+                "terms": {
+                    "description": [
+                        "theatre company in Berlin, Germany"
+                    ]
+                },
+                "thumbnail": {
+                    "source": "https://upload.wikimedia.org/wikipedia/commons/f/fb/Berlin_Kammerspiele_Deutsches_Theater.jpg",
+                    "width": 863,
+                    "height": 363
+                }
+            },
+            "5294599": {
+                "pageid": 5294599,
+                "ns": 0,
+                "title": "Heinrich B\u00f6ll Foundation",
+                "index": 2,
+                "extract": "The Heinrich B\u00f6ll Foundation (German: Heinrich-B\u00f6ll-Stiftung e.V.; Abbreviation: HBS) is a German legally independent political foundation. Affiliated with Alliance 90/The Greens, it was founded in 1997 when three predecessors merged. The foundation was named after German writer Heinrich B\u00f6ll (1917\u20131985).",
+                "coordinates": [
+                    {
+                        "lat": 52.5238,
+                        "lon": 13.383,
+                        "primary": "",
+                        "type": "landmark",
+                        "dim": "1000",
+                        "globe": "earth",
+                        "dist": 479.4
+                    }
+                ],
+                "terms": {
+                    "description": [
+                        "German, legally independent political foundation affiliated with the Green Party"
+                    ]
+                }
+            }
+        }
+    }
+}
