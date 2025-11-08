@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
-import { type LatLngBoundsExpression, type LatLngExpression } from "leaflet";
+import {
+  type LatLngBoundsExpression,
+  type LatLngExpression,
+} from "leaflet";
 import { Accordion } from "./ui/accordion";
 import InnerHTMLTxt from "@/components/InnerHTMLTxt";
 import { getAttraction, type Attraction } from "@/state/tours";
@@ -155,7 +158,10 @@ const NextStopMap = ({ tourId, attr, nextStop }: MapProps) => {
             </Marker>
           )}
           {routing && nextStop && (
-            <RoutingMachine from={attr.location} to={nextStop.location} />
+            <RoutingMachine
+              from={attr.location}
+              to={nextStop.location}
+            />
           )}
         </MapContainer>
         <div className="flex justify-end pt-2 max-w-3xl mx-auto">

@@ -47,9 +47,6 @@ export interface Tour {
   tourName: string;
   busStop: string;
   bahn: string;
-  ubahn: string;
-  sbahn: string;
-  tram: string;
   tourDistance: number;
   tourType: string;
   tourTime: number;
@@ -57,11 +54,10 @@ export interface Tour {
   tourDesc: string;
   tourBrief: string[];
   tourCoverImageFile: string;
-  stopImageWiki: string;
   tourCoverImageFileAlt: string;
-  coverImages: CoverImages[];
+  coverImages: CoverImage[];
   attractions: Attraction[];
-  highlights?: Highlights;
+  highlights: Highlights;
 }
 
 export interface Highlights {
@@ -70,7 +66,7 @@ export interface Highlights {
   tips: string[];
 }
 
-export interface CoverImages {
+export interface CoverImage {
   url: string;
   alt: string;
 }
@@ -81,9 +77,9 @@ export interface Attraction {
   end?: boolean;
   stopName: string;
   busStop: string;
-  bahn: string;
-  tram: string;
-  stopTag: string;
+  bahn?: string;
+  tram?: string;
+  stopTag?: string;
   facebookPageId?: number;
   wikiLink?: string;
   web?: string;
@@ -121,5 +117,38 @@ export interface StopInfo {
   look_out?: string[];
   next_stop?: string[];
   extra?: string[];
+}
+
+export interface Location {
+  lat: number;
+  lng: number;
+}
+
+export interface Pois {
+  title: string;
+  lat: number;
+  lng: number;
+  tag?: string;
+}
+
+export interface StopInfo {
+  title: string;
+  teaser: string[];
+  history: string[];
+  qi?: string[];
+  look_out?: string[];
+  next_stop?: string[];
+  extra?: string[];
   extraTitle?: string;
+}
+
+export interface CoverImage {
+  url: string;
+  alt: string;
+}
+
+export interface Highlights {
+  stops: string;
+  text: string[];
+  tips: string[];
 }
