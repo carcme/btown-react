@@ -21,8 +21,12 @@ const RoutingMachine = ({ from, to }) => {
         },
       }),
       waypoints: [L.latLng(from), L.latLng(to)],
-      createMarker: function () {
-        return null;
+      createMarker: function (i, waypoint, n) {
+        const marker = L.marker(waypoint.latLng, {
+            opacity: 0,
+            interactive: false,
+        });
+        return marker;
       },
       lineOptions: {
         styles: [{ color: "#10B981", weight: 4 }], //emerald
