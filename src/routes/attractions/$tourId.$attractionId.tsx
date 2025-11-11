@@ -19,7 +19,7 @@ import {
 } from "@/components/map/CustomMarkerIcon";
 import { InteractiveButtonGroup } from "@/components/interactive-button-group";
 import ToggleDark from "@/components/nav/ToggleDark";
-import { cn, firebaseImage } from "@/lib/utils";
+import { cn, firebaseImage, getCloudImage } from "@/lib/utils";
 
 import { Button } from "@/components/ui/button";
 import { BERLIN_CENTER } from "@/data/maps/defaults";
@@ -35,7 +35,7 @@ import { ArrowLeft, CircleX, Expand, Shrink, MapPin } from "lucide-react";
 import { ButtonGroup } from "@/components/ui/button-group";
 import { useLocalStorage } from "@/state/useLocalStorage";
 import type { WikiPage } from "@/components/map/WikiType";
-import WikiPopup from "@/components/map/WikiPopup";
+import WikiPopupContents from "@/components/map/WikiPopupContents";
 
 export const Route = createFileRoute("/attractions/$tourId/$attractionId")({
   component: RouteComponent,
@@ -54,19 +54,22 @@ export const Route = createFileRoute("/attractions/$tourId/$attractionId")({
   },
 });
 
+import { dummyWiki } from "@/data/dummyWiki";
+
 function RouteComponent() {
   const { tour, attraction } = Route.useLoaderData();
   const [fullScreen, setFullScreen] = useLocalStorage("mapFullScreen", false);
   const { lang } = useLanguage();
   const [position, setPosition] = useState<number>(window.pageYOffset);
   const [visible, setVisible] = useState<boolean>(true);
-  const [wikiPages, setWikiPages] = useState<WikiPage[] | null>(null);
+  const [wikiPages, setWikiPages] = useState<WikiPage[] | null>(dummyWiki);
 
   const [openMap, setMapOpen] = useState(false);
 
   const data = getAttraction(tour, attraction, lang);
 
-  const stopImage = firebaseImage(data?.stopImageFile);
+  // const stopImage = firebaseImage(data?.stopImageFile);
+  const stopImage = getCloudImage(data?.stopImageFile, 600);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -88,54 +91,49 @@ function RouteComponent() {
 
   useEffect(() => {}, [tour, lang]);
 
-  const showHeader = true; // debug
-
   return (
     <div className="relative">
-      {showHeader && (
-        <div className="max-w-3xl ">
-          <header
-            className={`p-2 z-10 bg-black/50 flex fixed w-full transition-[top] duration-700 ${headerCSS}`}
-          >
-            <div className="relative pl-2 mx-auto max-w-3xl flex justify-between w-3xl">
-              <Button
-                variant="secondary"
-                size="icon"
-                className="z-10 rounded-full hover:scale-110 transition-transform"
-                aria-label="back to tour summary"
+      <div className="max-w-3xl ">
+        <header
+          className={`p-2 z-10 bg-black/50 flex fixed w-full transition-[top] duration-700 ${headerCSS}`}
+        >
+          <div className="relative pl-2 mx-auto max-w-3xl flex justify-between w-3xl">
+            <Button
+              variant="secondary"
+              size="icon"
+              className="z-10 rounded-full hover:scale-110 transition-transform"
+              aria-label="back to tour summary"
+            >
+              <Link
+                to="/tour/$tourId"
+                params={{
+                  tourId: tour.toString(),
+                }}
               >
-                <Link
-                  to="/tour/$tourId"
-                  params={{
-                    tourId: tour.toString(),
-                  }}
-                >
-                  <ArrowLeft className="size-4" />
-                </Link>
-              </Button>
-              <div className="p-1.5 text-base text-white text-ellipsis font-spinnaker">
-                {data?.stopName}
-              </div>
-              <div className="pr-2 flex justify-end gap-2 ">
-                <div className="">
-                  <ToggleDark />
-                </div>
-                <Button
-                  size="icon"
-                  variant="secondary"
-                  className="hover:scale-110 transition-transform rounded-full"
-                  aria-label="Open Map"
-                  disabled={openMap}
-                  onClick={() => setMapOpen(true)}
-                >
-                  <MapPin className="size-4" />
-                </Button>
-              </div>
+                <ArrowLeft className="size-4" />
+              </Link>
+            </Button>
+            <div className="p-1.5 text-base text-white text-ellipsis font-spinnaker">
+              {data?.stopName}
             </div>
-          </header>
-        </div>
-      )}
-
+            <div className="pr-2 flex justify-end gap-2 ">
+              <div className="">
+                <ToggleDark />
+              </div>
+              <Button
+                size="icon"
+                variant="secondary"
+                className="hover:scale-110 transition-transform rounded-full"
+                aria-label="Open Map"
+                disabled={openMap}
+                onClick={() => setMapOpen(true)}
+              >
+                <MapPin className="size-4" />
+              </Button>
+            </div>
+          </div>
+        </header>
+      </div>
       <div className="m-auto flex items-center gap-4">
         <div className="relative w-full max-w-3xl mx-auto">
           <img
@@ -199,7 +197,7 @@ function RouteComponent() {
                     riseOnHover={true}
                   >
                     <MapPopup>
-                      <div className="flex flex-col">
+                      <div className="flex flex-col z-1000">
                         <p className="text-lg">
                           <b>{data?.stopName}</b>
                         </p>
@@ -242,7 +240,12 @@ function RouteComponent() {
                         riseOnHover={true}
                       >
                         <MapPopup>
-                          <WikiPopup page={page} />
+                          <WikiPopupContents
+                            allPages={wikiPages}
+                            page={page}
+                            tourId={tour.toString()}
+                            attractionId={attraction.toString()}
+                          />
                         </MapPopup>
                       </Marker>
                     );

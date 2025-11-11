@@ -1,3 +1,9 @@
+import { format, quality } from "@cloudinary/url-gen/actions/delivery";
+import { scale } from "@cloudinary/url-gen/actions/resize";
+import { Cloudinary, CloudinaryImage } from "@cloudinary/url-gen/index";
+
+import { auto } from "@cloudinary/url-gen/qualifiers/quality";
+
 import { clsx, type ClassValue } from "clsx";
 import { getDistance } from "geolib";
 import type { GeolibInputCoordinates } from "geolib/es/types";
@@ -14,6 +20,14 @@ export function firebaseImage(url: string | undefined) {
     url +
     import.meta.env.VITE_FIREBASE_TOKEN
   );
+}
+
+export function getCloudImage(filename: string | undefined, width: number) {
+  if (filename === undefined) return;
+
+  const url = `https://res.cloudinary.com/${import.meta.env.VITE_CLOUDINARY_NAME}/image/upload/w_${width}/q_35/f_webp/v1678886400/${filename}`;
+
+  return url;
 }
 
 export function useDebounceLoadingState(delay = 200) {

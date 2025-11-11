@@ -9,11 +9,18 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WikipageRouteImport } from './routes/wikipage'
 import { Route as ThemeRouteImport } from './routes/theme'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TourTourIdRouteImport } from './routes/tour/$tourId'
+import { Route as WikipediaTourIdAttractionIdRouteImport } from './routes/wikipedia/$tourId.$attractionId'
 import { Route as AttractionsTourIdAttractionIdRouteImport } from './routes/attractions/$tourId.$attractionId'
 
+const WikipageRoute = WikipageRouteImport.update({
+  id: '/wikipage',
+  path: '/wikipage',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ThemeRoute = ThemeRouteImport.update({
   id: '/theme',
   path: '/theme',
@@ -29,6 +36,12 @@ const TourTourIdRoute = TourTourIdRouteImport.update({
   path: '/tour/$tourId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const WikipediaTourIdAttractionIdRoute =
+  WikipediaTourIdAttractionIdRouteImport.update({
+    id: '/wikipedia/$tourId/$attractionId',
+    path: '/wikipedia/$tourId/$attractionId',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const AttractionsTourIdAttractionIdRoute =
   AttractionsTourIdAttractionIdRouteImport.update({
     id: '/attractions/$tourId/$attractionId',
@@ -39,48 +52,73 @@ const AttractionsTourIdAttractionIdRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/theme': typeof ThemeRoute
+  '/wikipage': typeof WikipageRoute
   '/tour/$tourId': typeof TourTourIdRoute
   '/attractions/$tourId/$attractionId': typeof AttractionsTourIdAttractionIdRoute
+  '/wikipedia/$tourId/$attractionId': typeof WikipediaTourIdAttractionIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/theme': typeof ThemeRoute
+  '/wikipage': typeof WikipageRoute
   '/tour/$tourId': typeof TourTourIdRoute
   '/attractions/$tourId/$attractionId': typeof AttractionsTourIdAttractionIdRoute
+  '/wikipedia/$tourId/$attractionId': typeof WikipediaTourIdAttractionIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/theme': typeof ThemeRoute
+  '/wikipage': typeof WikipageRoute
   '/tour/$tourId': typeof TourTourIdRoute
   '/attractions/$tourId/$attractionId': typeof AttractionsTourIdAttractionIdRoute
+  '/wikipedia/$tourId/$attractionId': typeof WikipediaTourIdAttractionIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/theme'
+    | '/wikipage'
     | '/tour/$tourId'
     | '/attractions/$tourId/$attractionId'
+    | '/wikipedia/$tourId/$attractionId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/theme' | '/tour/$tourId' | '/attractions/$tourId/$attractionId'
+  to:
+    | '/'
+    | '/theme'
+    | '/wikipage'
+    | '/tour/$tourId'
+    | '/attractions/$tourId/$attractionId'
+    | '/wikipedia/$tourId/$attractionId'
   id:
     | '__root__'
     | '/'
     | '/theme'
+    | '/wikipage'
     | '/tour/$tourId'
     | '/attractions/$tourId/$attractionId'
+    | '/wikipedia/$tourId/$attractionId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ThemeRoute: typeof ThemeRoute
+  WikipageRoute: typeof WikipageRoute
   TourTourIdRoute: typeof TourTourIdRoute
   AttractionsTourIdAttractionIdRoute: typeof AttractionsTourIdAttractionIdRoute
+  WikipediaTourIdAttractionIdRoute: typeof WikipediaTourIdAttractionIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/wikipage': {
+      id: '/wikipage'
+      path: '/wikipage'
+      fullPath: '/wikipage'
+      preLoaderRoute: typeof WikipageRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/theme': {
       id: '/theme'
       path: '/theme'
@@ -102,6 +140,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TourTourIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/wikipedia/$tourId/$attractionId': {
+      id: '/wikipedia/$tourId/$attractionId'
+      path: '/wikipedia/$tourId/$attractionId'
+      fullPath: '/wikipedia/$tourId/$attractionId'
+      preLoaderRoute: typeof WikipediaTourIdAttractionIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/attractions/$tourId/$attractionId': {
       id: '/attractions/$tourId/$attractionId'
       path: '/attractions/$tourId/$attractionId'
@@ -115,8 +160,10 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ThemeRoute: ThemeRoute,
+  WikipageRoute: WikipageRoute,
   TourTourIdRoute: TourTourIdRoute,
   AttractionsTourIdAttractionIdRoute: AttractionsTourIdAttractionIdRoute,
+  WikipediaTourIdAttractionIdRoute: WikipediaTourIdAttractionIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

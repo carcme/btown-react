@@ -92,8 +92,6 @@ export const buildWikiQuery = (lang, latlng, radius = 300, articles = 2) => {
 };
 
 export const useFetchWikiLookup = (lang, latlng) => {
-  latlng = null;
-
   if (latlng === null) return dummyQuery();
 
   const radius = 500;

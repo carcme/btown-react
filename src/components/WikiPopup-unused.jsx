@@ -1,6 +1,8 @@
 import React from "react";
 import { Link } from "@tanstack/react-router";
 import { firebaseImage } from "@/lib/utils";
+import { AdvancedImage } from "@cloudinary/react";
+import CloudinaryImage from "./CloudinaryImage";
 
 const SummaryListItem = ({ tourID, poi }) => {
   const stopImage = firebaseImage(poi.stopImageFile);
@@ -10,6 +12,12 @@ const SummaryListItem = ({ tourID, poi }) => {
       <Link to="/attraction" state={{ tourId: tourID, attractionId: poi.id }}>
         <div className="border border-muted border-opacity-60 shadow-md rounded p-2 mb-2 flex">
           <div className="shrink-0 flex items-center ">
+            <CloudinaryImage
+              publicId={poi.stopImageFile}
+              w={600}
+              alt={poi.stopName}
+              className="rounded-full w-69 h-24 object-cover"
+            />
             <img
               className="rounded-full w-24 h-24 object-cover"
               src={stopImage}

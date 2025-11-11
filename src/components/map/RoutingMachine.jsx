@@ -2,6 +2,7 @@ import L from "leaflet";
 import { useMap } from "react-leaflet";
 import { useEffect } from "react";
 import "leaflet-routing-machine";
+import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
 import "lrm-graphhopper";
 import { useLanguage } from "@/state/lang-provider";
 
@@ -13,18 +14,17 @@ const RoutingMachine = ({ from, to }) => {
     if (!map || !from || !to) return;
 
     const routingControl = L.Routing.control({
-      router: new L.Routing.GraphHopper("152de641-7154-42fa-a38d-b20d9564c7e8", {
+      router: new L.Routing.GraphHopper(import.meta.env.VITE_GRAPHHOPPER_KEY, {
         urlParameters: {
           profile: "foot",
           locale: lang,
           vehicle: "foot",
         },
       }),
-      waypoints: [L.latLng(from), L.latLng(to)],
       createMarker: function (i, waypoint, n) {
         const marker = L.marker(waypoint.latLng, {
-            opacity: 0,
-            interactive: false,
+          opacity: 0,
+          interactive: false,
         });
         return marker;
       },
@@ -41,12 +41,13 @@ const RoutingMachine = ({ from, to }) => {
       collapsible: true,
     }).addTo(map);
 
+    routingControl.setWaypoints([L.latLng(from), L.latLng(to)]);
+
     const router = routingControl.getRouter();
     router.on("response", function (e) {
       console.log("This routing request consumed " + e.credits + " credit(s)");
       console.log("You have " + e.remaining + " left");
     });
-
     return () => {
       map.removeControl(routingControl);
     };

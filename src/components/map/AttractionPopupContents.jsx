@@ -15,7 +15,7 @@ import { getDistance } from "geolib";
 import { useUserLocation } from "../../state/location-provider";
 import { useLanguage } from "@/state/lang-provider";
 import NoImage from "@/assets/no_image.png";
-import { firebaseImage } from "@/lib/utils";
+import CloudinaryImage from "../CloudinaryImage";
 
 function calcDistance(latlng1, latlng2) {
   const map = useMap();
@@ -35,8 +35,6 @@ function calcDistance(latlng1, latlng2) {
 
 const AttractionPopupContents = ({ attr }) => {
   const { location } = useUserLocation();
-
-  const image = firebaseImage(attr.stopImageFile);
 
   const map = useMap();
 
@@ -66,11 +64,17 @@ const AttractionPopupContents = ({ attr }) => {
           <p>{attr.stopInfo.teaser}</p>
         </div>
         <div className="bg-muted mt-4 aspect-video w-full rounded-xl">
-          <img
+          <CloudinaryImage
+            publicId={attr.stopImageFile}
+            w={300}
+            alt={attr.stopImageFile}
+            className="aspect-video w-92 rounded-md object-cover"
+          />
+          {/* <img
             src={image}
             alt="Wikipedia image"
             className="aspect-video w-92 rounded-md object-cover"
-          />
+          /> */}
           {/* <img src={image} /> */}
         </div>
       </CardContent>

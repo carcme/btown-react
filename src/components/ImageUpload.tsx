@@ -20,7 +20,7 @@ const ImageUpload = () => {
     }
 
     // Replace 'YOUR_UPLOAD_PRESET' with your actual Cloudinary upload preset.
-    const uploadPreset = "YOUR_UPLOAD_PRESET";
+    const uploadPreset = import.meta.env.VITE_CLOUDINARY_UPLOAD;
     const url = `https://api.cloudinary.com/v1_1/${cld.cloudinaryConfig.cloud.cloudName}/image/upload`;
 
     const formData = new FormData();

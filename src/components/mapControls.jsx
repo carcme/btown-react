@@ -25,62 +25,62 @@ import {
 import WikipediaIcon from "@/components/icons/flat-color-icons-wikipedia";
 import { Icon } from "leaflet";
 
-export const MapZoomControl = ({ className, ...props }) => {
-  const { crosshair, btn_pressed, ...others } = props;
+// export const MapZoomControl = ({ className, ...props }) => {
+//   const { crosshair, btn_pressed, ...others } = props;
 
-  const map = useMap();
-  const [zoomLevel, setZoomLevel] = useState(map.getZoom());
+//   const map = useMap();
+//   const [zoomLevel, setZoomLevel] = useState(map.getZoom());
 
-  useMapEvents({
-    zoomend: () => {
-      setZoomLevel(map.getZoom());
-    },
-  });
-  return (
-    <>
-      {crosshair && (
-        <div className={"absolute inset-1/2 z-1000 size-4 h-1/2 w-1/2"}>
-          <Plus className="text-muted-foreground" strokeWidth="0.5" />
-        </div>
-      )}
+//   useMapEvents({
+//     zoomend: () => {
+//       setZoomLevel(map.getZoom());
+//     },
+//   });
+//   return (
+//     <>
+//       {crosshair && (
+//         <div className={"absolute inset-1/2 z-1000 size-4 h-1/2 w-1/2"}>
+//           <Plus className="text-muted-foreground" strokeWidth="0.5" />
+//         </div>
+//       )}
 
-      <ButtonGroup
-        orientation="horizontal"
-        aria-label="Zoom controls"
-        className={cn(
-          "absolute top-1 left-1 z-1000 h-fit -rotate-180",
-          className
-        )}
-        {...others}
-      >
-        <Button
-          type="button"
-          size="icon-sm"
-          variant="hover"
-          aria-label="Zoom in"
-          title="Zoom in"
-          className="rounded-full border"
-          disabled={zoomLevel >= map.getMaxZoom()}
-          onClick={() => map.zoomIn()}
-        >
-          <PlusIcon />
-        </Button>
-        <Button
-          type="button"
-          size="icon-sm"
-          variant="hover"
-          aria-label="Zoom out"
-          title="Zoom out"
-          className="rounded-full border"
-          disabled={zoomLevel <= map.getMinZoom()}
-          onClick={() => map.zoomOut()}
-        >
-          <MinusIcon />
-        </Button>
-      </ButtonGroup>
-    </>
-  );
-};
+//       <ButtonGroup
+//         orientation="horizontal"
+//         aria-label="Zoom controls"
+//         className={cn(
+//           "absolute top-1 left-1 z-1000 h-fit -rotate-180",
+//           className
+//         )}
+//         {...others}
+//       >
+//         <Button
+//           type="button"
+//           size="icon-sm"
+//           variant="hover"
+//           aria-label="Zoom in"
+//           title="Zoom in"
+//           className="rounded-full border"
+//           disabled={zoomLevel >= map.getMaxZoom()}
+//           onClick={() => map.zoomIn()}
+//         >
+//           <PlusIcon />
+//         </Button>
+//         <Button
+//           type="button"
+//           size="icon-sm"
+//           variant="hover"
+//           aria-label="Zoom out"
+//           title="Zoom out"
+//           className="rounded-full border"
+//           disabled={zoomLevel <= map.getMinZoom()}
+//           onClick={() => map.zoomOut()}
+//         >
+//           <MinusIcon />
+//         </Button>
+//       </ButtonGroup>
+//     </>
+//   );
+// };
 
 // export function LocationMarker() {
 //   const [position, setPosition] = useState(null);

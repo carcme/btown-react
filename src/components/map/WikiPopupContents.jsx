@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -16,9 +16,11 @@ import { firebaseImage, getDist } from "@/lib/utils";
 import { useLanguage } from "@/state/lang-provider";
 import NoImage from "@/assets/no_image.png";
 
-const WikiPopupContents = ({ page }) => {
+const WikiPopupContents = ({ allPages, page, tourId, attractionId }) => {
   const { location } = useUserLocation();
   const { lang } = useLanguage();
+  const [wikiPages, setWikiPages] = useState(allPages);
+
   const latlng = { lat: page.coordinates[0].lat, lng: page.coordinates[0].lon };
   const linkUrl = `https://${lang}.wikipedia.org/wiki?curid=${page.pageid}`;
 
@@ -44,11 +46,22 @@ const WikiPopupContents = ({ page }) => {
           <p>{page.extract}</p>
         </div>
         <div className="bg-muted mt-4 aspect-video w-full rounded-xl">
-          <img
-            src={page.thumbnail ? page.thumbnail.source : NoImage}
-            alt={page.title}
-            className="aspect-video w-92 rounded-md object-cover"
-          />
+          <Link
+            to="/wikipedia/$tourId/$attractionId"
+            state={{ pages: wikiPages, page: page }}
+            params={{
+              tourId: tourId,
+              attractionId: attractionId,
+            }}
+          >
+            {/* <Link to={{ pathname: `/wikipedia/${page.pageid}`, state: { page } }}> */}
+            {/* <Link to="/WikiPage" state:wikipage={page}> */}
+            <img
+              src={page.thumbnail ? page.thumbnail.source : NoImage}
+              alt={page.title}
+              className="aspect-video w-92 rounded-md object-cover"
+            />
+          </Link>
         </div>
       </CardContent>
 

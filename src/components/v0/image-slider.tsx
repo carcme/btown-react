@@ -14,8 +14,8 @@ const stock = [
 ];
 
 export interface CoverImages {
-  url: string;
-  alt: string;
+  url: string | undefined;
+  alt: string | undefined;
 }
 interface ImageSliderProps {
   images?: CoverImages[];

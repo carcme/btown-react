@@ -10,6 +10,7 @@ import TourFeatureGroup from "@/components/map/TourFeatureGroup";
 // import { MapZoomControl } from "@/components/mapControls";
 import UserLocation from "@/components/map/UserLocation";
 import { Map, MapTileLayer, MapZoomControl } from "@/components/map/map";
+import ImageUpload from "@/components/ImageUpload";
 
 export const Route = createFileRoute("/")({
   component: App,
@@ -30,10 +31,17 @@ function App() {
     <>
       {/* <div className="h-14 bg-yellow-400"></div> */}
       <Header />
+
+      {/* TODO: remove test component */}
+      <div className="p-4">
+        <h2 className="text-2xl font-bold">Cloudinary Image Upload</h2>
+        <ImageUpload />
+      </div>
+
       <Map
         center={BERLIN_CENTER}
         zoom={BERLIN_CENTER.zoom}
-        scrollWheelZoom={true}
+        scrollWheelZoom={false}
         whenReady={onMapReady}
         closePopupOnClick={true}
         className="h-96"
@@ -49,7 +57,6 @@ function App() {
 
         <UserLocation />
       </Map>
-
       <div className="h-fi">
         <div className="flex md:grid md:grid-cols-2 lg:grid-cols-3 flex-col md:flex-row justify-center lg:max-w-6xl md:max-w-4xl mx-auto">
           {/* <div className="md:grid md:grid-cols-3 md:items-start justify-center gap-4 p-4 md:max-w-6xl md:mx-auto"> */}

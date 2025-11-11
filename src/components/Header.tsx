@@ -27,7 +27,7 @@ export default function Header() {
 
   return (
     <>
-      <header className="z-1000 p-2 w-full max-w-4xl mx-auto flex items-center justify-between  text-foreground bg-background">
+      <header className=" p-2 w-full max-w-4xl mx-auto flex items-center justify-between  text-foreground bg-background">
         <div className="flex gap-2">
           <button
             onClick={() => setIsOpen(true)}

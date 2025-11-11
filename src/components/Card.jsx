@@ -3,6 +3,8 @@ import { useDistance } from "../lib/mapsUtils";
 import { useUserLocation } from "../state/location-provider";
 import { useEffect } from "react";
 import { getDistance } from "geolib";
+import { getCloudImage } from "@/lib/utils";
+import CloudinaryImage from "./CloudinaryImage";
 
 const Card = ({ id, title, desc, brief, type, img, alt, latlng }) => {
   const { location } = useUserLocation();
@@ -28,18 +30,19 @@ const Card = ({ id, title, desc, brief, type, img, alt, latlng }) => {
         >
           {/* <Link to="/toursummary" state={{ tourId: id }}> */}
           <div className="relative">
-            <img
-              className="h-48 w-full object-cover object-center"
-              src={img}
+            <CloudinaryImage
+              publicId={img}
+              w={600}
               alt={alt}
+              className="h-60 w-full object-cover object-center"
             />
             <h1 className="absolute inset-0 mb-2 flex items-end justify-start pl-2 text-xl text-white">
               {title}
             </h1>
           </div>
           <div className="p-6">
-            <div className="flex justify-between">
-              <h2 className="title-font mb-1 text-xs font-medium tracking-widest text-muted-foreground uppercase">
+            <div className="flex justify-between items-center">
+              <h2 className="title-font mb-1 text-sm font-medium tracking-widest text-muted-foreground uppercase">
                 {type}
               </h2>
               <h2 className="title-font mb-1 text-xs font-medium text-muted-foreground">
@@ -50,13 +53,10 @@ const Card = ({ id, title, desc, brief, type, img, alt, latlng }) => {
               {title}
             </h1> */}
             <p className="mb-3 leading-relaxed text-gray-700">{desc}</p>
-            <div className="flex w-full flex-wrap items-center text-sm text-gray-300">
+            <div className="flex w-full flex-wrap items-center text-sm text-gray-300 ">
               {brief.map((txt, index) => {
                 return (
-                  <p
-                    className="pb-2 text-justify text-xs text-gray-500"
-                    key={index}
-                  >
+                  <p className="pb-2 text-pretty text-gray-500" key={index}>
                     {txt}
                   </p>
                 );

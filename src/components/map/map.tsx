@@ -21,7 +21,7 @@ import {
 import { DEFAULT_MAP, DEFAULT_MAP_DARK } from "@/data/maps/defaults";
 import { type LatLngExpression, type Map as LeafletMap } from "leaflet";
 import { cn, useDebounceLoadingState } from "@/lib/utils";
-import { Crosshair, Loader2, Plus, ZoomIn, ZoomOut } from "lucide-react";
+import { Plus, Crosshair, Loader2, ZoomIn, ZoomOut } from "lucide-react";
 import { ButtonGroup } from "../ui/button-group";
 import { Button } from "../ui/button";
 import { useUserLocation } from "@/state/location-provider";
@@ -40,7 +40,7 @@ export function Map({
       zoom={zoom}
       attributionControl={false}
       zoomControl={false}
-      className={cn("z-50 size-full min-h-96 flex-1 rounded-md", className)}
+      className={cn("size-full min-h-96 flex-1 rounded-md", className)}
       {...props}
     />
   );
@@ -73,7 +73,7 @@ export function MapPopup({
   return (
     <Popup
       className={cn(
-        "flex flex-col bg-popover text-popover-foreground z-50 w-72 rounded-md border p-4 font-grotesk shadow-md outline-hidden",
+        "flex flex-col bg-popover text-popover-foreground w-72 rounded-md border p-4 font-grotesk shadow-md outline-hidden",
         className
       )}
       {...props}
@@ -172,8 +172,12 @@ export function MapZoomControl({
         </>
       )}
       {crosshair && (
-        <div className={"absolute inset-1/2 z-400 size-4 h-1/2 w-1/2"}>
-          <Plus className="text-foreground" strokeWidth="0.5" />
+        <div
+          className={
+            "absolute inset-[50%] z-400 size-4 rotate-45 pointer-events-none"
+          }
+        >
+          <Plus className="text-foreground " strokeWidth="0.5" />
         </div>
       )}
 
@@ -181,7 +185,7 @@ export function MapZoomControl({
         orientation="uniform"
         aria-label="Map controls"
         className={cn(
-          "absolute flex flex-col items-center gap-2 rounded-2xl bg-background/60 p-2 shadow-lg transition-all duration-200 z-1000 top-auto right-4 bottom-4 left-auto",
+          "absolute flex flex-col items-center gap-2 rounded-2xl bg-background/60 p-2 shadow-lg transition-all duration-200 z-400 top-auto right-4 bottom-4 left-auto",
           position && "ring-1 ring-location/40",
           className
         )}
@@ -260,7 +264,7 @@ export function MapLookupButton({
 }: MapLookupButtonProps) {
   const [loading, setLoading] = useState(false);
   const [hasData, setHasData] = useState(displaying);
-
+  const { location } = useUserLocation();
   const map = useMap();
 
   const handleLookup = async () => {
@@ -270,7 +274,8 @@ export function MapLookupButton({
     } else
       try {
         setLoading(true);
-        const { lat, lng } = map.getCenter();
+        const center = location ? location : map.getCenter();
+        const { lat, lng } = center;
         const thumbsize = 480;
         const radius = 300;
         const CORS = "origin=*&"; // !!!IMPORTANT!!!
@@ -303,7 +308,7 @@ export function MapLookupButton({
         size="icon"
         variant="outline"
         onClick={handleLookup}
-        disabled={loading}
+        disabled={loading || !location}
         aria-label="Search Wikipedia in this area"
         className={cn(
           "hover:scale-105 transition-transform ",

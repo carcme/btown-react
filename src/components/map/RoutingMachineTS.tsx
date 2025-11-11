@@ -19,16 +19,13 @@ const RoutingMachine = ({
     if (!map || !from || !to) return;
 
     const routingControl = L.Routing.control({
-      router: new L.Routing.GraphHopper(
-        "152de641-7154-42fa-a38d-b20d9564c7e8",
-        {
-          urlParameters: {
-            profile: "foot",
-            locale: lang,
-            vehicle: "foot",
-          },
-        }
-      ),
+      router: new L.Routing.GraphHopper(import.meta.env.VITE_GRAPHHOPPER_KEY, {
+        urlParameters: {
+          profile: "foot",
+          locale: lang,
+          vehicle: "foot",
+        },
+      }),
       waypoints: [L.latLng(from), L.latLng(to)],
       createMarker: function () {
         return null;

@@ -43,7 +43,7 @@ if (rootElement && !rootElement.innerHTML) {
     <StrictMode>
       <TanStackQueryProvider.Provider {...TanStackQueryProviderContext}>
         <LanguageProvider defaultLang="en" storageKey="btown-lang">
-          <ThemeProvider defaultTheme="light" storageKey="btown-theme">
+          <ThemeProvider defaultTheme="dark" storageKey="btown-theme">
             <LocationProvider>
               <RouterProvider router={router} />
             </LocationProvider>

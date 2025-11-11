@@ -10,7 +10,6 @@ import {
   Popup,
   Rectangle,
 } from "react-leaflet";
-import TourPopup from "./TourPopup";
 import TourCard from "./AttractionPopupContents";
 import { createMarkerIcon } from "./CustomMarkerIcon";
 import { MarkerPopup } from "./MarkerPopup";
@@ -44,7 +43,6 @@ const TourFeatureGroup = ({ tours, ...props }) => {
                     position={[stop.location.lat, stop.location.lng]}
                   >
                     <Popup keepInView={true} className="newPopup">
-                      {/* <TourPopup attr={stop} /> */}
                       <TourCard attr={stop} />
                     </Popup>
                   </Marker>

@@ -1,16 +1,12 @@
 import { useEffect, useState } from "react";
-import {
-  type LatLngBoundsExpression,
-  type LatLngExpression,
-} from "leaflet";
+import { type LatLngBoundsExpression, type LatLngExpression } from "leaflet";
 import { Accordion } from "./ui/accordion";
 import InnerHTMLTxt from "@/components/InnerHTMLTxt";
 import { getAttraction, type Attraction } from "@/state/tours";
 
-import { MapContainer, Marker, Popup, useMap } from "react-leaflet";
-import { MapZoomControl } from "@/components/mapControls";
-import { MapTileLayer } from "@/components/map/map";
-import RoutingMachine from "@/components/map/RoutingMachine";
+import { Marker, Popup, useMap } from "react-leaflet";
+import { Map, MapTileLayer, MapZoomControl } from "@/components/map/map";
+import GraphHopperRouting from "./map/GraphHopperRouting";
 import { createMarkerIcon } from "@/components/map/CustomMarkerIcon";
 
 import { Button } from "@/components/ui/button";
@@ -93,6 +89,7 @@ interface MapProps {
 
 const NextStopMap = ({ tourId, attr, nextStop }: MapProps) => {
   const [routing, setRouting] = useState<boolean>(false);
+  const [tokens, setTokens] = useState<string>("");
 
   const performRouting = () => {
     setRouting(true);
@@ -105,11 +102,10 @@ const NextStopMap = ({ tourId, attr, nextStop }: MapProps) => {
   return (
     nextStop && (
       <div>
-        <MapContainer
+        <Map
           className="h-56 md:h-96 md:w-3xl mx-auto z-10"
           center={attr.location}
           zoom={18}
-          zoomControl={false}
           scrollWheelZoom={true}
         >
           <FitBounds
@@ -120,7 +116,8 @@ const NextStopMap = ({ tourId, attr, nextStop }: MapProps) => {
           <UserLocation />
           <MapTileLayer />
           <MapZoomControl
-            crosshair
+            crosshair={false}
+            showLocation={false}
             className="top-auto right-4 bottom-4 left-auto"
           />
           <Marker
@@ -158,12 +155,10 @@ const NextStopMap = ({ tourId, attr, nextStop }: MapProps) => {
             </Marker>
           )}
           {routing && nextStop && (
-            <RoutingMachine
-              from={attr.location}
-              to={nextStop.location}
-            />
+            <GraphHopperRouting from={attr.location} to={nextStop.location} />
+            // <RoutingMachine from={attr.location} to={nextStop.location} />
           )}
-        </MapContainer>
+        </Map>
         <div className="flex justify-end pt-2 max-w-3xl mx-auto">
           <ButtonGroup>
             <Button

@@ -20,7 +20,7 @@ import {
   Dot,
   ChevronRight,
 } from "lucide-react";
-import { firebaseImage } from "@/lib/utils";
+import { getCloudImage } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 
 export const Route = createFileRoute("/tour/$tourId")({
@@ -50,10 +50,12 @@ function RouteComponent() {
   const [rating, setRating] = useState<number>(4);
 
   // add the path to the images
-  const imageArr = tour?.coverImages?.map((img) => ({
-    ...img,
-    url: firebaseImage(img.url),
-  }));
+  const imageArr = tour?.coverImages?.map((img) => {
+    return {
+      ...img,
+      url: getCloudImage(img.url, 600),
+    };
+  });
 
   const timelineArr = tour?.attractions.map((attr) => ({
     tourId: tourId,
