@@ -1,6 +1,7 @@
-import { toursCreate } from ".";
+import { createStore } from ".";
+import toursData from "@/data/tours/btownTours.json";
 
-export const useTours = toursCreate<Root>("tours");
+export const useTours = createStore<Root>("tours", toursData);
 
 export const getTour = (id: number, lang: string) => {
   const { data } = useTours();
@@ -76,6 +77,7 @@ export interface Attraction {
   start?: boolean;
   end?: boolean;
   stopName: string;
+  vbb?: number;
   busStop: string;
   bahn?: string;
   tram?: string;
@@ -117,38 +119,4 @@ export interface StopInfo {
   look_out?: string[];
   next_stop?: string[];
   extra?: string[];
-}
-
-export interface Location {
-  lat: number;
-  lng: number;
-}
-
-export interface Pois {
-  title: string;
-  lat: number;
-  lng: number;
-  tag?: string;
-}
-
-export interface StopInfo {
-  title: string;
-  teaser: string[];
-  history: string[];
-  qi?: string[];
-  look_out?: string[];
-  next_stop?: string[];
-  extra?: string[];
-  extraTitle?: string;
-}
-
-export interface CoverImage {
-  url: string;
-  alt: string;
-}
-
-export interface Highlights {
-  stops: string;
-  text: string[];
-  tips: string[];
 }

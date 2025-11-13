@@ -7,7 +7,10 @@ import {
   Map,
   MapPopup,
   MapZoomControl,
-  MapLookupButton,
+  MapWikiButton,
+  MapRightClick,
+  LocationFinderDummy,
+  MapStateTracker, // Added import
 } from "@/components/map/map";
 import { Marker } from "react-leaflet";
 import type { LatLngExpression } from "leaflet";
@@ -19,7 +22,7 @@ import {
 } from "@/components/map/CustomMarkerIcon";
 import { InteractiveButtonGroup } from "@/components/interactive-button-group";
 import ToggleDark from "@/components/nav/ToggleDark";
-import { cn, firebaseImage, getCloudImage } from "@/lib/utils";
+import { cn, getCloudImage } from "@/lib/utils";
 
 import { Button } from "@/components/ui/button";
 import { BERLIN_CENTER } from "@/data/maps/defaults";
@@ -31,11 +34,30 @@ import {
   DrawerTitle,
 } from "@/components/ui/drawer";
 
-import { ArrowLeft, CircleX, Expand, Shrink, MapPin } from "lucide-react";
+import {
+  ArrowLeft,
+  CircleX,
+  Expand,
+  Shrink,
+  MapPin,
+  Info,
+  InfoIcon,
+} from "lucide-react";
 import { ButtonGroup } from "@/components/ui/button-group";
 import { useLocalStorage } from "@/state/useLocalStorage";
-import type { WikiPage } from "@/components/map/WikiType";
 import WikiPopupContents from "@/components/map/WikiPopupContents";
+import { useWikiPages } from "@/state/wiki";
+import type { WikiPageType } from "@/types/WikiType";
+import type { Poi } from "@/state/tours";
+
+import { LeafletRightClickProvider } from "@/components/map/MapRightClick";
+import { Toaster } from "@/components/ui/sonner";
+import { toast } from "sonner";
+import { WikiIcon } from "@/assets/svgIcons";
+import PoiPopupContents from "@/components/map/PoiPopupContents";
+import type { NominatimType } from "@/types/NominatimType";
+import type { LocationIQPlaceType } from "@/types/LocationIQ";
+import { dummyIQData } from "@/data/dummyData";
 
 export const Route = createFileRoute("/attractions/$tourId/$attractionId")({
   component: RouteComponent,
@@ -54,21 +76,24 @@ export const Route = createFileRoute("/attractions/$tourId/$attractionId")({
   },
 });
 
-import { dummyWiki } from "@/data/dummyWiki";
-
 function RouteComponent() {
   const { tour, attraction } = Route.useLoaderData();
   const [fullScreen, setFullScreen] = useLocalStorage("mapFullScreen", false);
   const { lang } = useLanguage();
   const [position, setPosition] = useState<number>(window.pageYOffset);
   const [visible, setVisible] = useState<boolean>(true);
-  const [wikiPages, setWikiPages] = useState<WikiPage[] | null>(dummyWiki);
+  const { data: wikiPages, setData: setWikiPages } = useWikiPages();
+
+  const [nominatimData, setNominatimData] = useState<NominatimType>();
+  const [locationIQPlaces, setLocationIQPlaces] = useState<
+    LocationIQPlaceType[] | null
+  >(null);
 
   const [openMap, setMapOpen] = useState(false);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   const data = getAttraction(tour, attraction, lang);
 
-  // const stopImage = firebaseImage(data?.stopImageFile);
   const stopImage = getCloudImage(data?.stopImageFile, 600);
 
   useEffect(() => {
@@ -170,88 +195,137 @@ function RouteComponent() {
                   scrollWheelZoom={true}
                 >
                   <MapTileLayer />
+
+                  {/* State tracker component */}
+                  <MapStateTracker setPopupOpen={setIsPopupOpen} />
+
                   <MapZoomControl className="top-auto right-4 bottom-4 left-auto" />
+                  <LeafletRightClickProvider>
+                    <Toaster />
+                    <MapRightClick
+                      onResult={(data) => {
+                        if (data === null) {
+                          console.log("data is null");
+                          return;
+                        } else {
+                          console.log("🚀 ~ MapRightClick ~ data:", data);
+                          setNominatimData(data);
+                        }
+                      }}
+                    />
 
-                  <MapLookupButton
-                    lang={lang}
-                    displaying={wikiPages != null}
-                    onResult={(data) => {
-                      if (data === null) {
-                        setWikiPages(null);
-                        return;
-                      }
-                      const wikiPages = data?.query?.pages;
-                      if (wikiPages) {
-                        setWikiPages(wikiPages);
-                        console.log(wikiPages);
-                      } else {
-                        alert("No nearby Wikipedia articles found!");
-                      }
-                    }}
-                  />
-                  <Marker
-                    key={data?.stopName}
-                    position={center || BERLIN_CENTER}
-                    title={data?.stopName}
-                    icon={createMarkerIcon("#C2410C", "")}
-                    riseOnHover={true}
-                  >
-                    <MapPopup>
-                      <div className="flex flex-col z-1000">
-                        <p className="text-lg">
-                          <b>{data?.stopName}</b>
-                        </p>
-                        <p className="text-xs">{data?.busStop}</p>
-                      </div>
-                    </MapPopup>
-                  </Marker>
-                  {/* // show the poi markers */}
-                  {data?.pois.map((poi) => {
-                    return (
+                    <LocationFinderDummy
+                      showing={locationIQPlaces !== null}
+                      onResult={(data) => {
+                        setLocationIQPlaces(data);
+                      }}
+                    />
+
+                    {nominatimData && (
                       <Marker
-                        key={poi.title}
-                        title={poi.title}
-                        position={[poi.lat, poi.lng]}
-                        icon={createMarkerIcon("#F59E0B88", "000", "0.3")}
+                        key={nominatimData.place_id}
+                        position={
+                          [
+                            nominatimData.lat,
+                            nominatimData.lon,
+                          ] as unknown as LatLngExpression
+                        }
+                        title={nominatimData.name}
+                        icon={createMarkerIcon("#0070F3", "")}
                         riseOnHover={true}
                       >
                         <MapPopup>
-                          <div className="flex flex-col">
-                            <p className="text-lg">
-                              <b>{poi.title}</b>
-                            </p>
-                          </div>
+                          <PoiPopupContents place={nominatimData} />
                         </MapPopup>
                       </Marker>
-                    );
-                  })}
-                  {/* Wikipedia lookup Markers */}
+                    )}
 
-                  {wikiPages?.map((page) => {
-                    return (
-                      <Marker
-                        key={page.pageid}
-                        title={page.title}
-                        position={[
-                          page.coordinates[0].lat,
-                          page.coordinates[0].lon,
-                        ]}
-                        icon={createWikiMarkerIcon()}
-                        riseOnHover={true}
-                      >
-                        <MapPopup>
-                          <WikiPopupContents
-                            allPages={wikiPages}
-                            page={page}
-                            tourId={tour.toString()}
-                            attractionId={attraction.toString()}
-                          />
-                        </MapPopup>
-                      </Marker>
-                    );
-                  })}
+                    <MapWikiButton
+                      lang={lang}
+                      displaying={wikiPages != null}
+                      onResult={(data) => {
+                        if (data === null) {
+                          setWikiPages([]);
+                          return;
+                        }
+                        const wikiPagesData = data?.query?.pages;
+                        if (wikiPagesData) {
+                          setWikiPages(wikiPagesData);
+                        } else {
+                          toast("No Wikipedia articles found!", {
+                            description:
+                              "Re-position the map center and try again",
+                            position: "top-center",
+                            style: {
+                              gap: "1rem",
+                            },
+                            icon: <WikiIcon />,
+                          });
+                        }
+                      }}
+                    />
+
+                    <Marker
+                      key={data?.stopName}
+                      position={center || BERLIN_CENTER}
+                      title={data?.stopName}
+                      icon={createMarkerIcon("#C2410C", "")}
+                      riseOnHover={true}
+                    >
+                      <MapPopup>
+                        <div className="flex flex-col z-1000">
+                          <p className="text-lg">
+                            <b>{data?.stopName}</b>
+                          </p>
+                          <p className="text-xs">{data?.busStop}</p>
+                        </div>
+                      </MapPopup>
+                    </Marker>
+                    {/* // show the poi markers */}
+                    {data?.pois.map((poi: Poi) => {
+                      return (
+                        <Marker
+                          key={poi.title}
+                          title={poi.title}
+                          position={[poi.lat, poi.lng]}
+                          icon={createMarkerIcon("#F59E0B88", "000", "0.3")}
+                          riseOnHover={true}
+                        >
+                          <MapPopup>
+                            <div className="flex flex-col">
+                              <p className="text-lg">
+                                <b>{poi.title}</b>
+                              </p>
+                            </div>
+                          </MapPopup>
+                        </Marker>
+                      );
+                    })}
+                    {/* Wikipedia lookup Markers */}
+                    {wikiPages?.map((page: WikiPageType) => {
+                      return (
+                        <Marker
+                          key={page.pageid}
+                          title={page.title}
+                          position={[
+                            page.coordinates[0].lat,
+                            page.coordinates[0].lon,
+                          ]}
+                          icon={createWikiMarkerIcon()}
+                          riseOnHover={true}
+                        >
+                          <MapPopup>
+                            <WikiPopupContents
+                              page={page}
+                              tourId={tour.toString()}
+                              attractionId={attraction.toString()}
+                            />
+                          </MapPopup>
+                        </Marker>
+                      );
+                    })}
+                  </LeafletRightClickProvider>
                 </Map>
-
                 <ButtonGroup
                   orientation="uniform"
                   aria-label="Map display controls"
@@ -294,6 +368,7 @@ function RouteComponent() {
           tour={tour}
           currentId={attraction}
           attrInfo={data}
+          lang={lang}
         />
 
         <AttractionAccordion

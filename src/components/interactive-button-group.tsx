@@ -6,26 +6,31 @@ import {
   ChevronLeft,
   ChevronRight,
   ClipboardCheck,
-  Heart,
   Info,
   Share2Icon,
 } from "lucide-react";
+
 import { Link } from "@tanstack/react-router";
 import { Toaster } from "./ui/sonner";
 import { toast } from "sonner";
 import { getAttraction, type Attraction } from "@/state/tours";
 import { InfoBox } from "./info-box";
+import VbbStations from "./vbb-stations";
+import { BerlinUBahn } from "@/assets/svgIcons";
 
 export function InteractiveButtonGroup({
   tour,
   attrInfo,
   currentId,
+  lang,
 }: {
   tour: number;
   currentId: number;
   attrInfo: Attraction | undefined;
+  lang: string;
 }) {
-  const [isRevealed, setIsRevealed] = useState(false);
+  const [infoRevealed, setInfoRevealed] = useState(false);
+  const [bvgRevealed, setBvgRevealed] = useState(false);
   const [copied, setCopied] = useState(false);
 
   const data = getAttraction(tour, currentId, "en");
@@ -46,7 +51,6 @@ export function InteractiveButtonGroup({
   return (
     <div className="w-full max-w-3xl space-y-4 mx-auto">
       <Toaster />
-
       {/* Button Group */}
       <div className="flex gap-2 w-full">
         {/* Left Arrow Button */}
@@ -61,6 +65,8 @@ export function InteractiveButtonGroup({
           <Link
             to="/attractions/$tourId/$attractionId"
             params={{ tourId: tour.toString(), attractionId: prev.toString() }}
+            // close popup so api not called unless asked
+            onClick={() => setBvgRevealed(false)}
           >
             <ChevronLeft />
           </Link>
@@ -69,23 +75,14 @@ export function InteractiveButtonGroup({
         <div className="flex gap-2 flex-1 justify-center">
           {/* Reveal Button */}
           <Button
-            variant={isRevealed ? "berlin" : "outline"}
+            variant={infoRevealed ? "berlin" : "outline"}
             size="default"
-            onClick={() => setIsRevealed(!isRevealed)}
+            onClick={() => setInfoRevealed(!infoRevealed)}
             aria-label="Toggle reveal"
-            aria-expanded={isRevealed}
+            aria-expanded={infoRevealed}
           >
             <Info className="h-4 w-4" />
             Info
-          </Button>
-
-          <Button
-            variant="outline"
-            size="icon"
-            aria-label="Like"
-            disabled={true}
-          >
-            <Heart className="h-4 w-4" />
           </Button>
 
           <Button
@@ -107,6 +104,17 @@ export function InteractiveButtonGroup({
           >
             <Share2Icon className="size-4" />
           </Button>
+
+          <Button
+            variant={bvgRevealed ? "berlin" : "outline"}
+            size="default"
+            onClick={() => setBvgRevealed(!bvgRevealed)}
+            aria-label="Toggle reveal"
+            aria-expanded={bvgRevealed}
+          >
+            BVG
+            <BerlinUBahn className="h-4 w-4" />
+          </Button>
         </div>
 
         <Button
@@ -119,23 +127,36 @@ export function InteractiveButtonGroup({
           <Link
             to="/attractions/$tourId/$attractionId"
             params={{ tourId: tour.toString(), attractionId: next.toString() }}
+            // close popup so api not called unless asked
+            onClick={() => setBvgRevealed(false)}
           >
             <ChevronRight />
           </Link>
         </Button>
         {/* Right Arrow Button */}
       </div>
-
       {/* Revealed Content */}
 
       <div
         className={`overflow-hidden transition-all duration-800 ease-in-out ${
-          isRevealed ? "max-h-fit opacity-100" : "max-h-0 opacity-0"
+          infoRevealed ? "max-h-fit opacity-100" : "max-h-0 opacity-0"
         }`}
       >
         <div className="p-px rounded-none bg-background">
           <InfoBox infoData={data} />
         </div>
+      </div>
+
+      <div
+        className={`overflow-hidden transition-all duration-800 ease-in-out ${
+          bvgRevealed ? "max-h-fit opacity-100" : "max-h-0 opacity-0"
+        }`}
+      >
+        {data?.vbb && (
+          <div className="p-px rounded-none bg-background">
+            {bvgRevealed && <VbbStations stopId={data.vbb} lang={lang} />}
+          </div>
+        )}
       </div>
     </div>
   );

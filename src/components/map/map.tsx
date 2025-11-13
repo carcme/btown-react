@@ -1,4 +1,11 @@
-import React, { useEffect, useState, type Ref } from "react";
+import React, {
+  useEffect,
+  useState,
+  useRef,
+  type Ref,
+  type Dispatch,
+  type SetStateAction,
+} from "react";
 import { useTheme } from "@/state/theme-provider";
 import {
   MapContainer,
@@ -9,11 +16,15 @@ import {
   useMap,
   CircleMarker,
   Circle,
+  useMapEvents,
+  Marker,
 } from "react-leaflet";
 
 import {
+  DivIcon,
   Popup as LeafletPopup,
   type ErrorEvent,
+  type LeafletMouseEvent,
   type LocateOptions,
   type LocationEvent,
 } from "leaflet";
@@ -26,6 +37,20 @@ import { ButtonGroup } from "../ui/button-group";
 import { Button } from "../ui/button";
 import { useUserLocation } from "@/state/location-provider";
 import WikiIcon from "./WikiIcon";
+
+import ReactLeafletRightClick from "@/components/map/MapRightClick";
+
+import axios from "axios";
+import type { LocationIQPlaceType } from "@/types/LocationIQ";
+import { createIqMarkerIcon } from "./CustomMarkerIcon";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardFooter,
+} from "@/components/ui/card";
+import { Badge } from "../ui/badge";
 
 export function Map({
   zoom = 15,
@@ -249,19 +274,19 @@ export function MapZoomControl({
   );
 }
 
-interface MapLookupButtonProps extends React.ComponentProps<"div"> {
+interface MapWikiButtonProps extends React.ComponentProps<"div"> {
   lang: string;
   displaying: boolean;
   onResult?: (data: any) => void; // optional callback with result
 }
 
-export function MapLookupButton({
+export function MapWikiButton({
   lang,
   displaying,
   className,
   onResult,
   ...props
-}: MapLookupButtonProps) {
+}: MapWikiButtonProps) {
   const [loading, setLoading] = useState(false);
   const [hasData, setHasData] = useState(displaying);
   const { location } = useUserLocation();
@@ -274,8 +299,10 @@ export function MapLookupButton({
     } else
       try {
         setLoading(true);
-        const center = location ? location : map.getCenter();
-        const { lat, lng } = center;
+        const center = map.getCenter(); //const center = location ? location : map.getCenter();
+        const centerLatLng = center as L.LatLng;
+        const lat = centerLatLng.lat;
+        const lng = centerLatLng.lng;
         const thumbsize = 480;
         const radius = 300;
         const CORS = "origin=*&"; // !!!IMPORTANT!!!
@@ -325,5 +352,244 @@ export function MapLookupButton({
         )}
       </Button>
     </div>
+  );
+}
+
+interface MapRightClickProps extends React.ComponentProps<"div"> {
+  onResult?: (data: any) => void; // optional callback with result
+}
+
+export function MapRightClick({ onResult }: MapRightClickProps) {
+  const [loading, setLoading] = useState(false);
+
+  const onRightClick = async (e: LeafletMouseEvent) => {
+    if (!loading)
+      try {
+        setLoading(true);
+        // const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&osm_type=N&extratags=1&namedetails=1&lat=${e.latlng.lat}&lon=${e.latlng.lng}`;
+
+        // const key = `e1Y1qB424txGqd3LyXpwSR55pPQpuv5l`;
+        // const url = `https://api.geocodify.com/v2/reverse?api_key=${key}&lat=${e.latlng.lat}&lng=${e.latlng.lng}`;
+
+        const key = `pk.5f135066b99b7087d417752281fed2f3`;
+
+        const url = `https://us1.locationiq.com/v1/reverse?key=${key}&lat=${e.latlng.lat}&lon=${e.latlng.lng}&namedetails=1&extratags=1&normalizeaddress=1&showdistance=1&format=json&`;
+
+        //  const url = `https://us1.locationiq.com/v1/reverse?key=${key}&lat=${e.latlng.lat}&lon=${e.latlng.lng}&format=json&lang=en`;
+
+        const response = await fetch(url);
+        const data = await response.json();
+
+        console.log("🚀 ~ onRightClick ~ data:", data);
+
+        if (onResult) onResult(data);
+      } catch (error) {
+        console.error("Reverse geolookup failed:", error);
+      } finally {
+        setLoading(false);
+      }
+  };
+
+  return <ReactLeafletRightClick onRightClick={onRightClick} />;
+}
+
+/*
+interface MapWikiButtonProps extends React.ComponentProps<"div"> {
+  lang: string;
+  displaying: boolean;
+  onResult?: (data: any) => void; // optional callback with result
+}
+*/
+
+interface DummyProps extends React.ComponentProps<"div"> {
+  showing: boolean;
+  radius?: number; // in meters
+  limit?: number;
+  onResult: (data: LocationIQPlaceType[] | null) => void; // Updated type
+}
+
+/**
+ *
+ * @param showing: has previous data (used to show & remove markers )
+ * @param radius:  search area
+ * @param limit:   how many result to return
+ * @returns
+ */
+export const LocationFinderDummy = ({
+  showing,
+  radius = 500, // in m
+  limit = 50, // # results
+  onResult,
+}: DummyProps) => {
+  const [loading, setLoading] = useState<boolean>(false);
+  const [locationIQPlaces, setLocationIQPlaces] = useState<
+    LocationIQPlaceType[] | null
+  >();
+  const { theme } = useTheme();
+
+  useMapEvents({
+    async click(e) {
+      if (loading) return; // Don't do anything if a fetch is already in progress
+
+      // If there are already places showing, clear them
+      if (showing) {
+        onResult(null);
+        setLocationIQPlaces(null);
+        return;
+      }
+
+      // what to search for
+      const tags =
+        "toilet,pub,restaurant,atm,tourism:*,!tourism:hotel,!tourism:guest_house,!tourism:hostel,!tourism:apartment";
+
+      const { lat, lng } = e.latlng;
+      try {
+        setLoading(true);
+        const response = await axios.get(
+          "https://eu1.locationiq.com/v1/nearby.php",
+          {
+            params: {
+              key: import.meta.env.VITE_LOCATION_IQ_API_KEY,
+              lat: lat,
+              lon: lng,
+              radius: radius,
+              limit: limit,
+              tag: tags,
+              format: "json",
+            },
+          }
+        );
+
+        const places = response.data?.map((place: LocationIQPlaceType) => {
+          return {
+            ...place,
+            icon: createIqMarkerIcon(theme, place.type),
+          };
+        });
+        onResult(places);
+        setLocationIQPlaces(places);
+        console.log("🚀 ~ LocationFinderDummy ~ response:", response.data);
+      } catch (err) {
+        console.error("Error fetching LocationIQ places:", err);
+        onResult(null); // Pass null on error
+      } finally {
+        setLoading(false);
+      }
+    },
+  });
+
+  return (
+    <>
+      {locationIQPlaces !== null && null}
+      {locationIQPlaces?.map((place: LocationIQPlaceType) => (
+        <Marker
+          key={place.osm_id + place.place_id}
+          icon={place.icon}
+          position={
+            [parseFloat(place.lat), parseFloat(place.lon)] as LatLngExpression
+          }
+        >
+          <MapPopup>
+            <PlaceCard
+              title={place.name}
+              address={place.address.road + ", " + place.address.suburb}
+              badgeText={place.type}
+              icon={place.icon}
+            />
+          </MapPopup>
+        </Marker>
+      ))}
+    </>
+  );
+};
+
+interface PlaceCardProps {
+  title: string;
+  address: string;
+  badgeText?: string;
+  buttonText?: string;
+  icon?: DivIcon;
+  onButtonClick?: () => void;
+}
+export default function PlaceCard({
+  title,
+  address,
+  badgeText = "Featured",
+  buttonText = "View All",
+  icon,
+  onButtonClick,
+}: PlaceCardProps) {
+  console.log("🚀 ~ PlaceCard ~ title:", title);
+  let svg: string | false | HTMLElement | undefined;
+  if (icon) svg = icon?.options.html;
+
+  return (
+    <Card className="relative w-full max-w-sm border rounded-xl overflow-hidden">
+      {/* Badge */}
+      <div className="absolute top-2 right-2">
+        <Badge variant="secondary" className="text-xs uppercase tracking-wide">
+          {badgeText}
+        </Badge>
+      </div>
+
+      {/* Header */}
+      <CardHeader className="pt-2">
+        <CardTitle className="text-xl font-semibold leading-tight text-left ">
+          <div className="flex justify-start items-center gap-2">
+            {svg && <SvgIcon className="text-amber-300" svg={svg} size={24} />}
+            {title !== undefined ? title : address}
+          </div>
+        </CardTitle>
+        <CardDescription className="text-muted-foreground text-sm text-left">
+          {title !== undefined && address}
+        </CardDescription>
+      </CardHeader>
+
+      {/* Footer / Button */}
+      <CardFooter className="pt-2">
+        <Button
+          variant={"outline"}
+          className="w-full font-medium"
+          onClick={onButtonClick}
+        >
+          {buttonText}
+        </Button>
+      </CardFooter>
+    </Card>
+  );
+}
+
+interface SvgIconProps {
+  svg: string | HTMLElement;
+  size?: number;
+  className?: string;
+}
+
+function SvgIcon({ svg, size = 24, className }: SvgIconProps) {
+  const containerRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    // Clear existing contents
+    container.innerHTML = "";
+
+    if (typeof svg === "string") {
+      svg = svg.replace("fill=#0070F3", "fill=#000000");
+      svg = svg.replace("stroke-width=2", "stroke-width=1.5");
+      container.innerHTML = svg;
+    } else if (svg instanceof HTMLElement) {
+      // append a clone so we don't move the original element out of the Leaflet icon
+      container.appendChild(svg.cloneNode(true));
+    }
+  }, [svg]);
+
+  return (
+    <div
+      ref={containerRef}
+      className={cn("inline-block ", className)}
+      style={{ width: size, height: size }}
+    />
   );
 }

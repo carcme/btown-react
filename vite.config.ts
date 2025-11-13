@@ -24,4 +24,10 @@ export default defineConfig({
       "@ui": fileURLToPath(new URL("./src/components/ui", import.meta.url)),
     },
   },
+  build: {
+    rollupOptions: {
+      // exclude specific files or modules from being bundled
+      external: ["/src/data/dummyData.tsx"],
+    },
+  },
 });

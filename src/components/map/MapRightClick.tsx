@@ -1,3 +1,4 @@
+// https://github.com/dekguh/react-leaflet-rightclick/blob/develop/src/index.tsx
 import React, {
   createContext,
   type ReactNode,
@@ -11,7 +12,9 @@ import { type LeafletMouseEvent, Point } from "leaflet";
 
 export const LeafletRightClickContext = createContext<{
   rightClickEvent: LeafletMouseEvent | null;
-  setRightClickEvent: React.Dispatch<React.SetStateAction<LeafletMouseEvent | null>>;
+  setRightClickEvent: React.Dispatch<
+    React.SetStateAction<LeafletMouseEvent | null>
+  >;
 }>({
   rightClickEvent: null,
   setRightClickEvent: () => {}, // Default no-op function
@@ -41,9 +44,9 @@ export const useLeafletRightClick = (): LeafletMouseEvent | null => {
   return rightClickEvent;
 };
 
-const MapRightClick: React.FC<{
+const ReactLeafletRightClick: React.FC<{
   onRightClick?: (event: LeafletMouseEvent) => void;
-  customComponent: ReactNode | React.JSX.Element;
+  customComponent?: ReactNode | React.JSX.Element;
 }> = (props) => {
   const { onRightClick, customComponent: CustomComponent } = props;
 
@@ -158,4 +161,4 @@ const MapRightClick: React.FC<{
   );
 };
 
-export default MapRightClick;
+export default ReactLeafletRightClick;

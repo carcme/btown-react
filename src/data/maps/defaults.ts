@@ -19,7 +19,7 @@ declare interface BERLIN_CENTER_TYPES {
 }
 
 export const BERLIN_CENTER = {
-  lat: 52.526998,
+  lat: 52.516998,
   lng: 13.378248,
   zoom: 12,
 } as BERLIN_CENTER_TYPES;

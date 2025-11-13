@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import cld from "@/lib/cloudinary";
+import { cloudName } from "@/lib/cloudinary";
 
 const ImageUpload = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -21,7 +21,7 @@ const ImageUpload = () => {
 
     // Replace 'YOUR_UPLOAD_PRESET' with your actual Cloudinary upload preset.
     const uploadPreset = import.meta.env.VITE_CLOUDINARY_UPLOAD;
-    const url = `https://api.cloudinary.com/v1_1/${cld.cloudinaryConfig.cloud.cloudName}/image/upload`;
+    const url = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
 
     const formData = new FormData();
     formData.append("file", file);

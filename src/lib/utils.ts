@@ -1,13 +1,7 @@
-import { format, quality } from "@cloudinary/url-gen/actions/delivery";
-import { scale } from "@cloudinary/url-gen/actions/resize";
-import { Cloudinary, CloudinaryImage } from "@cloudinary/url-gen/index";
-
-import { auto } from "@cloudinary/url-gen/qualifiers/quality";
-
+import { useEffect, useRef, useState } from "react";
 import { clsx, type ClassValue } from "clsx";
 import { getDistance } from "geolib";
 import type { GeolibInputCoordinates } from "geolib/es/types";
-import { useEffect, useRef, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
@@ -68,4 +62,38 @@ export function getDist(
   } else {
     return meters + " m";
   }
+}
+export default function getCommonsImage(fileUrl: string) {
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchImage = async () => {
+      if (!fileUrl) return;
+
+      try {
+        // Extract filename from Commons URL
+        const match = fileUrl.match(/File:(.+)$/);
+        if (!match) return;
+
+        const filename = decodeURIComponent(match[1]);
+
+        // Query Wikimedia API for the image URL
+        const res = await fetch(
+          `https://commons.wikimedia.org/w/api.php?action=query&titles=File:${filename}&prop=imageinfo&iiprop=url&format=json&origin=*`
+        );
+        const data = await res.json();
+        const pages = data?.query?.pages;
+        const page = pages ? (Object.values(pages)[0] as any) : null;
+        const url = page?.imageinfo?.[0]?.url ?? null;
+        setImageUrl(url);
+      } catch (err) {
+        console.error("Failed to fetch Commons image:", err);
+      } finally {
+      }
+    };
+
+    fetchImage();
+  }, [fileUrl]);
+
+  return imageUrl;
 }

@@ -32,19 +32,13 @@ function App() {
       {/* <div className="h-14 bg-yellow-400"></div> */}
       <Header />
 
-      {/* TODO: remove test component */}
-      <div className="p-4">
-        <h2 className="text-2xl font-bold">Cloudinary Image Upload</h2>
-        <ImageUpload />
-      </div>
-
       <Map
         center={BERLIN_CENTER}
         zoom={BERLIN_CENTER.zoom}
         scrollWheelZoom={false}
         whenReady={onMapReady}
         closePopupOnClick={true}
-        className="h-96"
+        className="md:h-96 md:min-h-96 h-56 min-h-56"
       >
         <MapTileLayer />
         <MapZoomControl

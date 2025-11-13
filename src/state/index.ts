@@ -1,39 +1,32 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import type { Root } from "./tours";
 
-import toursData from "@/data/tours/btownTours.json";
-
-export function toursCreate<ToursState>(queryKey: unknown) {
-  return createTours<ToursState>(queryKey, toursData);
-}
-
-function createTours<T>(queryKey: unknown, jsonFile: Root) {
-  return function () {
+export function createStore<T>(queryKey: string, initialData: T) {
+  const useStore = () => {
     const queryClient = useQueryClient();
 
-    const { data } = useQuery({
+    const { data } = useQuery<T>({
       queryKey: [queryKey],
-      queryFn: () => Promise.resolve(jsonFile),
-      refetchInterval: false,
+      queryFn: () => {
+        // This function will only be called if there is no initialData
+        // and no data in the cache. We can throw an error or return a default value.
+        // For now, I'll assume we always have initialData.
+        return {} as T;
+      },
+      initialData,
       refetchOnMount: false,
       refetchOnWindowFocus: false,
-      refetchOnReconnect: false,
-      refetchIntervalInBackground: false,
     });
 
-    function setData(data: Partial<T>) {
-      queryClient.setQueryData([queryKey], data);
-    }
+    const setData = (updater: T | ((old: T | undefined) => T)) => {
+      queryClient.setQueryData<T>([queryKey], updater);
+    };
 
-    function resetData() {
-      queryClient.invalidateQueries({
-        queryKey: [queryKey],
-      });
-      queryClient.refetchQueries({
-        queryKey: [queryKey],
-      });
-    }
+    const reset = () => {
+      queryClient.setQueryData<T>([queryKey], initialData);
+    };
 
-    return { data, setData, resetData };
+    return { data: data as T, setData, reset };
   };
+
+  return useStore;
 }

@@ -1,9 +1,10 @@
 import { Cloudinary } from "@cloudinary/url-gen";
 
-// Replace 'YOUR_CLOUD_NAME' with your actual Cloudinary cloud name.
+export const cloudName = import.meta.env.VITE_CLOUDINARY_NAME; // Replace 'YOUR_CLOUD_NAME' with your actual Cloudinary cloud name.
+
 const cld = new Cloudinary({
   cloud: {
-    cloudName: import.meta.env.VITE_CLOUDINARY_NAME,
+    cloudName: cloudName,
   },
 });
 

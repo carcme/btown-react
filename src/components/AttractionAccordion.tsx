@@ -89,7 +89,6 @@ interface MapProps {
 
 const NextStopMap = ({ tourId, attr, nextStop }: MapProps) => {
   const [routing, setRouting] = useState<boolean>(false);
-  const [tokens, setTokens] = useState<string>("");
 
   const performRouting = () => {
     setRouting(true);
@@ -108,10 +107,12 @@ const NextStopMap = ({ tourId, attr, nextStop }: MapProps) => {
           zoom={18}
           scrollWheelZoom={true}
         >
-          <FitBounds
-            southWest={attr?.location}
-            northEast={nextStop?.location}
-          />
+          {attr?.location && nextStop?.location && (
+            <FitBounds
+              southWest={attr?.location}
+              northEast={nextStop?.location}
+            />
+          )}
 
           <UserLocation />
           <MapTileLayer />

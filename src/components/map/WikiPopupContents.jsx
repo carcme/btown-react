@@ -16,10 +16,9 @@ import { firebaseImage, getDist } from "@/lib/utils";
 import { useLanguage } from "@/state/lang-provider";
 import NoImage from "@/assets/no_image.png";
 
-const WikiPopupContents = ({ allPages, page, tourId, attractionId }) => {
+const WikiPopupContents = ({ page, tourId, attractionId }) => {
   const { location } = useUserLocation();
   const { lang } = useLanguage();
-  const [wikiPages, setWikiPages] = useState(allPages);
 
   const latlng = { lat: page.coordinates[0].lat, lng: page.coordinates[0].lon };
   const linkUrl = `https://${lang}.wikipedia.org/wiki?curid=${page.pageid}`;
@@ -48,14 +47,12 @@ const WikiPopupContents = ({ allPages, page, tourId, attractionId }) => {
         <div className="bg-muted mt-4 aspect-video w-full rounded-xl">
           <Link
             to="/wikipedia/$tourId/$attractionId"
-            state={{ pages: wikiPages, page: page }}
+            state={{ page: page }}
             params={{
               tourId: tourId,
               attractionId: attractionId,
             }}
           >
-            {/* <Link to={{ pathname: `/wikipedia/${page.pageid}`, state: { page } }}> */}
-            {/* <Link to="/WikiPage" state:wikipage={page}> */}
             <img
               src={page.thumbnail ? page.thumbnail.source : NoImage}
               alt={page.title}
