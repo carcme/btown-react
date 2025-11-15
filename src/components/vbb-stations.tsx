@@ -7,11 +7,10 @@ import {
   BerlinUBahn,
 } from "@/assets/svgIcons";
 import { Spinner } from "./ui/spinner";
-import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
-import { AlertCircleIcon } from "lucide-react";
 import { useVbbStations } from "@/state/wiki";
+import AlertBox from "./AlertBox";
 
-export interface Line {
+export interface LineType {
   id: string;
   name: string;
   mode: string;
@@ -20,10 +19,10 @@ export interface Line {
   // Add other properties if needed
 }
 
-export interface StopData {
+export interface StopDataType {
   id: string;
   name: string;
-  lines: Line[];
+  lines: LineType[];
 
   // Add other properties if needed
 }
@@ -80,12 +79,12 @@ const VbbStations: React.FC<VbbStationsProps> = ({ stopId, lang }) => {
 
   if (error) {
     console.log("🚀 ~ VbbStations ~ error:", error);
-    return <ShowAlert title="Something went wrong!" desc={error} />;
+    return <AlertBox title="Something went wrong!" desc={error} />;
   }
 
   if (!stopData) {
     return (
-      <ShowAlert
+      <AlertBox
         title="No VBB station data found"
         desc="Check your internet connection"
       />
@@ -102,7 +101,7 @@ const VbbStations: React.FC<VbbStationsProps> = ({ stopId, lang }) => {
       acc[line.product].push(line);
       return acc;
     },
-    {} as Record<string, Line[]>
+    {} as Record<string, LineType[]>
   );
 
   return (
@@ -181,20 +180,3 @@ const VbbStations: React.FC<VbbStationsProps> = ({ stopId, lang }) => {
 };
 
 export default VbbStations;
-
-interface ShowAlertProps {
-  title: string;
-  desc: string;
-}
-
-const ShowAlert = ({ title, desc }: ShowAlertProps) => {
-  return (
-    <Alert variant="destructive">
-      <AlertCircleIcon />
-      <AlertTitle>{title}</AlertTitle>
-      <AlertDescription>
-        <p className="text-sm">{desc}</p>
-      </AlertDescription>
-    </Alert>
-  );
-};

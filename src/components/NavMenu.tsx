@@ -57,7 +57,7 @@ interface Navbar1Props {
 const NavMenu = ({
   logo = {
     url: ".",
-    src: "ic_launcher_skyline_squ-web.svg",
+    src: "skyline.svg",
     alt: "logo",
     title: "",
   },

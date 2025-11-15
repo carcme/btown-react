@@ -97,3 +97,33 @@ export default function getCommonsImage(fileUrl: string) {
 
   return imageUrl;
 }
+
+// Converts a Wikimedia Commons "File:" page URL
+// into a working thumbnail URL (default width: 330px)
+
+export async function commonsToThumbnail(url: string, width = 330) {
+  // 1. Extract filename
+  const match = url.match(/File:(.*)$/);
+  if (!match) throw new Error("Invalid Commons File: URL");
+
+  const filename = decodeURIComponent(match[1]);
+
+  // 2. MD5 hash determines the folder structure on Wikimedia servers
+  const md5 = await md5Hash(filename);
+  const dir1 = md5.slice(0, 1);
+  const dir2 = md5.slice(0, 2);
+
+  // 3. Construct the URL
+  return `https://upload.wikimedia.org/wikipedia/commons/thumb/${dir1}/${dir2}/${encodeURIComponent(
+    filename
+  )}/${width}px-${encodeURIComponent(filename)}`;
+}
+
+// Small helper to compute MD5 in browser / vite
+async function md5Hash(str: string) {
+  const utf8 = new TextEncoder().encode(str);
+  const hash = await crypto.subtle.digest("MD5", utf8);
+  return [...new Uint8Array(hash)]
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+}

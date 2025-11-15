@@ -10,19 +10,11 @@ import {
   Popup,
   Rectangle,
 } from "react-leaflet";
-import TourCard from "./AttractionPopupContents";
+import AttractionPopupContents from "./AttractionPopupContents";
 import { createMarkerIcon } from "./CustomMarkerIcon";
 import { MarkerPopup } from "./MarkerPopup";
 import { COLOURS } from "@/data/maps/defaults";
-
-const iconColors = [
-  "#cc1b0e",
-  "#167a1d",
-  "#a1a115",
-  "#fcba03",
-  "#ad28de",
-  "#2000db",
-];
+import { MapPopup } from "./map";
 
 const TourFeatureGroup = ({ tours, ...props }) => {
   return (
@@ -42,9 +34,9 @@ const TourFeatureGroup = ({ tours, ...props }) => {
                     icon={createMarkerIcon(COLOURS[index].hex)}
                     position={[stop.location.lat, stop.location.lng]}
                   >
-                    <Popup keepInView={true} className="newPopup">
-                      <TourCard attr={stop} />
-                    </Popup>
+                    <MapPopup keepInView={false} className="newPopup">
+                      <AttractionPopupContents attr={stop} />
+                    </MapPopup>
                   </Marker>
                 ))}
               </FeatureGroup>

@@ -5,11 +5,13 @@ import { Home, Menu, Network, X } from "lucide-react";
 
 import ToggleDark from "@/components/nav/ToggleDark";
 import ToggleLanguage from "@/components/nav/ToggleLanguage";
+import { SkylineIcon } from "@/assets/svgIcons";
+import { useTheme } from "@/state/theme-provider";
 
 const navItems = {
   logo: {
     url: ".",
-    src: "/btown/city.svg",
+    src: "/skyline.svg",
     alt: "B-Town Logo",
     title: "",
   },
@@ -24,6 +26,9 @@ const navItems = {
 };
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
+  const { theme } = useTheme();
+
+  const bg = theme === "dark" ? "#000" : "#fff";
 
   return (
     <>
@@ -36,13 +41,17 @@ export default function Header() {
           >
             <Menu size={24} />
           </button>
-          <h1 className="ml-4 text-xl font-semibold">
+          <h1 className="text-xl font-semibold  items-center flex">
             <Link to="/">
-              <img
+              <SkylineIcon
+                className="fill-foreground h-7 xs:h-8 sm:h-10"
+                bg={bg}
+              />
+              {/* <img
                 src={navItems.logo.src}
                 alt={navItems.logo.alt}
-                className="h-10"
-              />
+                className="h-10 fill-amber-300"
+              /> */}
             </Link>
           </h1>
         </div>
@@ -58,7 +67,8 @@ export default function Header() {
         }`}
       >
         <div className="flex items-center justify-between p-4 border-b border-gray-700">
-          <h2 className="text-xl font-bold">Navigation</h2>
+          <SkylineIcon className="fill-foreground" bg={bg} />
+
           <button
             onClick={() => setIsOpen(false)}
             className="p-2 hover:bg-gray-800 rounded-lg transition-colors"

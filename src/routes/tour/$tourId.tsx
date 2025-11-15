@@ -126,7 +126,7 @@ function RouteComponent() {
 
         {tour && (
           <div className="text-center pb-4">
-            <Button asChild variant="secondary">
+            <Button asChild variant="berlin">
               <Link
                 to="/attractions/$tourId/$attractionId"
                 params={{

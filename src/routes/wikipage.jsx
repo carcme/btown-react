@@ -12,35 +12,6 @@ import {
 import { ArrowLeft } from "lucide-react";
 import { useEffect, useState } from "react";
 
-const temp = {
-  pageid: 158898,
-  ns: 0,
-  title: "Nikolaiviertel",
-  index: -1,
-  extract:
-    "The Nikolaiviertel (; 'Nicholas Quarter') is an old quarter of the German capital of Berlin, founded c. 1200. Together with nearby Cölln, they jointly make up Alt-Berlin, the reconstructed historical heart of the city. Located in the Mitte locality (in the homonymous district), it is five minutes away from Alexanderplatz and Berlin Palace.",
-  coordinates: [
-    {
-      lat: 52.51666667,
-      lon: 13.40722222,
-      primary: true,
-      type: "landmark",
-      dim: "1000",
-      globe: "earth",
-      dist: 90.9,
-    },
-  ],
-  terms: {
-    description: ["old quarter of the German capital of Berlin"],
-  },
-  thumbnail: {
-    source:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/View_Berlin_TV_Tower_Jan2015_img4.jpg/500px-View_Berlin_TV_Tower_Jan2015_img4.jpg",
-    width: 480,
-    height: 320,
-  },
-};
-
 export const Route = createFileRoute("/wikipage")({
   component: WikiPage,
 });

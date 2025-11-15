@@ -11,7 +11,7 @@
 //   // Add other properties if needed
 // }
 
-import type { DivIcon } from "leaflet";
+import type { DivIcon, LatLngExpression } from "leaflet";
 
 export interface LocationIQPlaceType {
   place_id: string;
@@ -39,4 +39,9 @@ export interface IqAddressType {
   postcode: string;
   country: string;
   country_code: string;
+}
+
+export interface osmPlaceType {
+  osm_id: string;
+  latlng: LatLngExpression;
 }

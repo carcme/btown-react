@@ -10,7 +10,6 @@ import TourFeatureGroup from "@/components/map/TourFeatureGroup";
 // import { MapZoomControl } from "@/components/mapControls";
 import UserLocation from "@/components/map/UserLocation";
 import { Map, MapTileLayer, MapZoomControl } from "@/components/map/map";
-import ImageUpload from "@/components/ImageUpload";
 
 export const Route = createFileRoute("/")({
   component: App,
@@ -38,7 +37,7 @@ function App() {
         scrollWheelZoom={false}
         whenReady={onMapReady}
         closePopupOnClick={true}
-        className="md:h-96 md:min-h-96 h-56 min-h-56"
+        className="h-96 md:min-h-96 "
       >
         <MapTileLayer />
         <MapZoomControl

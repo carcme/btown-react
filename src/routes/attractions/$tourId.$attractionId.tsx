@@ -9,11 +9,12 @@ import {
   MapZoomControl,
   MapWikiButton,
   MapRightClick,
-  LocationFinderDummy,
-  MapStateTracker, // Added import
+  SearchNearby,
+  MapStateTracker,
+  ShowSelectedNearby,
 } from "@/components/map/map";
-import { Marker } from "react-leaflet";
-import type { LatLngExpression } from "leaflet";
+import { Marker, useMap } from "react-leaflet";
+import { LatLng, type LatLngExpression } from "leaflet";
 
 import AttractionAccordion from "@/components/AttractionAccordion";
 import {
@@ -34,19 +35,11 @@ import {
   DrawerTitle,
 } from "@/components/ui/drawer";
 
-import {
-  ArrowLeft,
-  CircleX,
-  Expand,
-  Shrink,
-  MapPin,
-  Info,
-  InfoIcon,
-} from "lucide-react";
+import { ArrowLeft, CircleX, Expand, Shrink, MapPin } from "lucide-react";
 import { ButtonGroup } from "@/components/ui/button-group";
 import { useLocalStorage } from "@/state/useLocalStorage";
 import WikiPopupContents from "@/components/map/WikiPopupContents";
-import { useWikiPages } from "@/state/wiki";
+import { useIqPlaces, useWikiPages } from "@/state/wiki";
 import type { WikiPageType } from "@/types/WikiType";
 import type { Poi } from "@/state/tours";
 
@@ -56,11 +49,20 @@ import { toast } from "sonner";
 import { WikiIcon } from "@/assets/svgIcons";
 import PoiPopupContents from "@/components/map/PoiPopupContents";
 import type { NominatimType } from "@/types/NominatimType";
-import type { LocationIQPlaceType } from "@/types/LocationIQ";
-import { dummyIQData } from "@/data/dummyData";
+import AttractionPopupContents from "@/components/map/AttractionPopupContents";
+import type { osmPlaceType } from "@/types/LocationIQ";
 
 export const Route = createFileRoute("/attractions/$tourId/$attractionId")({
   component: RouteComponent,
+
+  validateSearch: (search) => {
+    return {
+      osm_id: (search.osm_id as string) || null,
+      lat: (search.lat as number) || null,
+      lng: (search.lng as number) || null,
+    };
+  },
+
   loader: async ({ params }) => {
     return {
       tour: Number(params.tourId),
@@ -78,6 +80,9 @@ export const Route = createFileRoute("/attractions/$tourId/$attractionId")({
 
 function RouteComponent() {
   const { tour, attraction } = Route.useLoaderData();
+  const { osm_id, lat, lng } = Route.useSearch();
+  const [osmPlace, setOsmPlace] = useState<osmPlaceType | null>(null);
+
   const [fullScreen, setFullScreen] = useLocalStorage("mapFullScreen", false);
   const { lang } = useLanguage();
   const [position, setPosition] = useState<number>(window.pageYOffset);
@@ -85,9 +90,9 @@ function RouteComponent() {
   const { data: wikiPages, setData: setWikiPages } = useWikiPages();
 
   const [nominatimData, setNominatimData] = useState<NominatimType>();
-  const [locationIQPlaces, setLocationIQPlaces] = useState<
-    LocationIQPlaceType[] | null
-  >(null);
+
+  const { data: locationIQPlaces, setData: setLocationIQPlaces } =
+    useIqPlaces();
 
   const [openMap, setMapOpen] = useState(false);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -114,7 +119,15 @@ function RouteComponent() {
       : undefined;
   const headerCSS = visible ? "top-0" : "-top-20";
 
-  useEffect(() => {}, [tour, lang]);
+  useEffect(() => {
+    if (osm_id) {
+      setMapOpen(true);
+      setTimeout(() => {
+        console.log("🚀 ~ RouteComponent ~ lat, lng:", lat, lng);
+        setOsmPlace({ osm_id: osm_id, latlng: [lat, lng] as LatLngExpression });
+      }, 330);
+    }
+  }, [tour, lang, osm_id]);
 
   return (
     <div className="relative">
@@ -206,21 +219,29 @@ function RouteComponent() {
                       onResult={(data) => {
                         if (data === null) {
                           console.log("data is null");
-                          return;
+                          l: return;
                         } else {
                           console.log("🚀 ~ MapRightClick ~ data:", data);
                           setNominatimData(data);
                         }
                       }}
                     />
-
-                    <LocationFinderDummy
+                    <SearchNearby
+                      tourId={tour}
+                      attractionId={attraction}
                       showing={locationIQPlaces !== null}
+                      isPopupOpen={isPopupOpen}
                       onResult={(data) => {
                         setLocationIQPlaces(data);
                       }}
                     />
-
+                    {osmPlace && (
+                      <ShowSelectedNearby
+                        osm_id={osmPlace.osm_id}
+                        latlng={osmPlace.latlng}
+                        onShown={() => setOsmPlace(null)}
+                      />
+                    )}
                     {nominatimData && (
                       <Marker
                         key={nominatimData.place_id}
@@ -239,10 +260,9 @@ function RouteComponent() {
                         </MapPopup>
                       </Marker>
                     )}
-
                     <MapWikiButton
                       lang={lang}
-                      displaying={wikiPages != null}
+                      displaying={wikiPages.length !== 0}
                       onResult={(data) => {
                         if (data === null) {
                           setWikiPages([]);
@@ -263,44 +283,7 @@ function RouteComponent() {
                           });
                         }
                       }}
-                    />
-
-                    <Marker
-                      key={data?.stopName}
-                      position={center || BERLIN_CENTER}
-                      title={data?.stopName}
-                      icon={createMarkerIcon("#C2410C", "")}
-                      riseOnHover={true}
-                    >
-                      <MapPopup>
-                        <div className="flex flex-col z-1000">
-                          <p className="text-lg">
-                            <b>{data?.stopName}</b>
-                          </p>
-                          <p className="text-xs">{data?.busStop}</p>
-                        </div>
-                      </MapPopup>
-                    </Marker>
-                    {/* // show the poi markers */}
-                    {data?.pois.map((poi: Poi) => {
-                      return (
-                        <Marker
-                          key={poi.title}
-                          title={poi.title}
-                          position={[poi.lat, poi.lng]}
-                          icon={createMarkerIcon("#F59E0B88", "000", "0.3")}
-                          riseOnHover={true}
-                        >
-                          <MapPopup>
-                            <div className="flex flex-col">
-                              <p className="text-lg">
-                                <b>{poi.title}</b>
-                              </p>
-                            </div>
-                          </MapPopup>
-                        </Marker>
-                      );
-                    })}
+                    />{" "}
                     {/* Wikipedia lookup Markers */}
                     {wikiPages?.map((page: WikiPageType) => {
                       return (
@@ -320,6 +303,37 @@ function RouteComponent() {
                               tourId={tour.toString()}
                               attractionId={attraction.toString()}
                             />
+                          </MapPopup>
+                        </Marker>
+                      );
+                    })}
+                    <Marker
+                      key={data?.stopName}
+                      position={center || BERLIN_CENTER}
+                      title={data?.stopName}
+                      icon={createMarkerIcon("#C2410C", "")}
+                      riseOnHover={true}
+                    >
+                      <MapPopup>
+                        <AttractionPopupContents attr={data} />
+                      </MapPopup>
+                    </Marker>
+                    {/* // show the poi markers */}
+                    {data?.pois.map((poi: Poi) => {
+                      return (
+                        <Marker
+                          key={poi.title}
+                          title={poi.title}
+                          position={[poi.lat, poi.lng]}
+                          icon={createMarkerIcon("#F59E0B88", "000", "0.3")}
+                          riseOnHover={true}
+                        >
+                          <MapPopup>
+                            <div className="flex flex-col">
+                              <p className="text-lg">
+                                <b>{poi.title}</b>
+                              </p>
+                            </div>
                           </MapPopup>
                         </Marker>
                       );

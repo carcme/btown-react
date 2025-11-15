@@ -33,7 +33,6 @@ function RouteComponent() {
             placeholder="Search Berlin landmarks..."
             className="border-input"
           />
-
           <div className="flex gap-2 flex-wrap">
             <Button variant="default">Primary</Button>
             <Button variant="secondary">Secondary</Button>
@@ -46,27 +45,29 @@ function RouteComponent() {
             <Button variant="outline">Outline</Button>
             <Button variant="ghost">Ghost</Button>
             <Button variant="hover">Hover</Button>
+            <Button variant="berlin">Berlin</Button>
           </div>
-
           <div className="h-20 w-full bg-accent text-accent-foreground rounded-md flex items-center justify-center font-semibold">
             Accent — Urban Art Pop
           </div>
 
           <div className="grid grid-cols-2 gap-2">
-            <div className="bg-primary text-primary-foreground p-3 rounded-md text-center font-medium">
-              Prussian Blue
+            <div className="bg-bt-electric-blue text-background p-3 rounded-md text-center font-medium">
+              Electric Blue
             </div>
-            <div className="bg-secondary text-secondary-foreground p-3 rounded-md text-center font-medium">
-              Bauhaus Yellow
+            <div className="bg-bt-Bright-Yellow secondary text-background p-3 rounded-md text-center font-medium">
+              Bright Yellow
             </div>
-            <div className="bg-accent text-accent-foreground p-3 rounded-md text-center font-medium">
-              Magenta / Cyan
+            <div className="bg-bt-amber text-background p-3 rounded-md text-center font-medium">
+              Amber
             </div>
-            <div className="bg-muted text-muted-foreground p-3 rounded-md text-center font-medium">
-              Concrete Gray
+            <div className="bg-bt-Violet text-background p-3 rounded-md text-center font-medium">
+              Violet
+            </div>
+            <div className="bg-bt-Magenta text-background p-3 rounded-md text-center font-medium">
+              Magenta
             </div>
           </div>
-
           <div className="flex flex-col items-center justify-center text-sm text-muted-foreground border-t border-border pt-4">
             <p>
               Inspired by Berlin’s industrial past, Bauhaus design, and vibrant

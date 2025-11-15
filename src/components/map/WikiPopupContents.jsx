@@ -44,7 +44,7 @@ const WikiPopupContents = ({ page, tourId, attractionId }) => {
         <div className="line-clamp-4 text-left text-pretty">
           <p>{page.extract}</p>
         </div>
-        <div className="bg-muted mt-4 aspect-video w-full rounded-xl">
+        <div className="relative bg-muted mt-4 aspect-video w-full rounded-xl">
           <Link
             to="/wikipedia/$tourId/$attractionId"
             state={{ page: page }}
@@ -58,6 +58,11 @@ const WikiPopupContents = ({ page, tourId, attractionId }) => {
               alt={page.title}
               className="aspect-video w-92 rounded-md object-cover"
             />
+            <div className="absolute inset-0 ">
+              <div className="absolute p-1 bottom-1 right-1 z-10 bg-background/50 rounded-full">
+                <WikiIcon className="fill-foreground" />
+              </div>
+            </div>
           </Link>
         </div>
       </CardContent>
@@ -66,18 +71,6 @@ const WikiPopupContents = ({ page, tourId, attractionId }) => {
         <div className="flex justify-start gap-1 grow">
           <Compass size={16} className="motion-safe:animate-wiggle " />
           {page != undefined && meters}
-        </div>
-        <div className="flex justify-end grow">
-          <Link to={linkUrl} target="_blank" rel="noopener noreferrer">
-            <Button
-              variant="hover"
-              size="xs"
-              className="bg-background px-2 text-xs text-muted-foreground"
-            >
-              Read More
-              <ArrowDown className="motion-safe:animate-direction -rotate-90" />
-            </Button>
-          </Link>
         </div>
       </CardFooter>
     </Card>

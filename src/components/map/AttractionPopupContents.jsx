@@ -16,6 +16,7 @@ import { useUserLocation } from "../../state/location-provider";
 import { useLanguage } from "@/state/lang-provider";
 import NoImage from "@/assets/no_image.png";
 import CloudinaryImage from "../CloudinaryImage";
+import { BtownIcon } from "@/assets/svgIcons";
 
 function calcDistance(latlng1, latlng2) {
   const map = useMap();
@@ -33,9 +34,13 @@ function calcDistance(latlng1, latlng2) {
   }
 }
 
+/**
+ * Used on: Main page map,
+ * @param {*} param0
+ * @returns
+ */
 const AttractionPopupContents = ({ attr }) => {
   const { location } = useUserLocation();
-
   const map = useMap();
 
   let meters = getDistance(attr.location, location);
@@ -49,12 +54,14 @@ const AttractionPopupContents = ({ attr }) => {
     meters = getDistance(attr.location, location);
   }, [location]);
 
+  console.log(attr);
+
   return (
-    <Card className="w-56 max-w-md gap-0 py-2 pt-0 shadow-none">
+    <Card className="max-w-md gap-0 py-2 pt-0 shadow-none">
       <CardHeader className="flex items-center px-2 py-2">
         <div className="bg-muted text-muted-foreground flex size-8 items-center justify-center rounded-full px-1 ">
-          {/* <img src={BtownIcon} alt="" /> */}
-          <WikiIcon className="fill-muted-foreground" />
+          {/* <img src="/skyline.svg" alt="" className="rounded-full" /> */}
+          <BtownIcon className="fill-muted-foreground rounded-full overflow-clip" />
         </div>
         <div className="text-start">{attr.stopInfo.title}</div>
       </CardHeader>
@@ -63,19 +70,23 @@ const AttractionPopupContents = ({ attr }) => {
         <div className="line-clamp-4 text-left text-pretty">
           <p>{attr.stopInfo.teaser}</p>
         </div>
-        <div className="bg-muted mt-4 aspect-video w-full rounded-xl">
+        <div className="relative bg-muted mt-4 aspect-video w-full rounded-xl">
           <CloudinaryImage
             publicId={attr.stopImageFile}
             w={300}
             alt={attr.stopImageFile}
             className="aspect-video w-92 rounded-md object-cover"
           />
-          {/* <img
-            src={image}
-            alt="Wikipedia image"
-            className="aspect-video w-92 rounded-md object-cover"
-          /> */}
-          {/* <img src={image} /> */}
+
+          {attr.wikiLink && (
+            <Link to={attr.wikiLink} target="_blank" rel="noopener noreferrer">
+              <div className="absolute inset-0 ">
+                <div className="absolute p-1 bottom-1 right-1 z-10 bg-background/50 rounded-full">
+                  <WikiIcon className="fill-foreground" />
+                </div>
+              </div>
+            </Link>
+          )}
         </div>
       </CardContent>
 
@@ -83,18 +94,6 @@ const AttractionPopupContents = ({ attr }) => {
         <div className="flex justify-start gap-1 grow">
           <Compass size={16} className="motion-safe:animate-wiggle " />
           {attr != undefined && meters}
-        </div>
-        <div className="flex justify-end grow">
-          <Link to={attr.wikiLink} target="_blank" rel="noopener noreferrer">
-            <Button
-              variant="hover"
-              size="xs"
-              className="bg-background px-2 text-xs text-muted-foreground"
-            >
-              Read More
-              <ArrowDown className="motion-safe:animate-direction -rotate-90" />
-            </Button>
-          </Link>
         </div>
       </CardFooter>
     </Card>

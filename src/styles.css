@@ -198,6 +198,17 @@ code {
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+
+  --color-bt-electric-blue: #0070f3;
+  --color-bt-emerald: #10b981;
+  --color-bt-amber: #f59e0b;
+  --color-bt-Rust-Orange: #c2410c;
+  --color-bt-Bright-Yellow: #ffd600;
+  --color-bt-Hot-Pink: #ff007f;
+  --color-bt-Violet: #8b5cf6;
+  --color-bt-Vivid-Red: #ff3131;
+  --color-bt-Magenta: #db2777;
+  --color-bt-Charcoal: #1e1e1e;
 }
 
 @layer base {

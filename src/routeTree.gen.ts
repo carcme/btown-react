@@ -14,6 +14,7 @@ import { Route as ThemeRouteImport } from './routes/theme'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TourTourIdRouteImport } from './routes/tour/$tourId'
 import { Route as WikipediaTourIdAttractionIdRouteImport } from './routes/wikipedia/$tourId.$attractionId'
+import { Route as PlacesTourIdAttractionIdRouteImport } from './routes/places/$tourId.$attractionId'
 import { Route as AttractionsTourIdAttractionIdRouteImport } from './routes/attractions/$tourId.$attractionId'
 
 const WikipageRoute = WikipageRouteImport.update({
@@ -42,6 +43,12 @@ const WikipediaTourIdAttractionIdRoute =
     path: '/wikipedia/$tourId/$attractionId',
     getParentRoute: () => rootRouteImport,
   } as any)
+const PlacesTourIdAttractionIdRoute =
+  PlacesTourIdAttractionIdRouteImport.update({
+    id: '/places/$tourId/$attractionId',
+    path: '/places/$tourId/$attractionId',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const AttractionsTourIdAttractionIdRoute =
   AttractionsTourIdAttractionIdRouteImport.update({
     id: '/attractions/$tourId/$attractionId',
@@ -55,6 +62,7 @@ export interface FileRoutesByFullPath {
   '/wikipage': typeof WikipageRoute
   '/tour/$tourId': typeof TourTourIdRoute
   '/attractions/$tourId/$attractionId': typeof AttractionsTourIdAttractionIdRoute
+  '/places/$tourId/$attractionId': typeof PlacesTourIdAttractionIdRoute
   '/wikipedia/$tourId/$attractionId': typeof WikipediaTourIdAttractionIdRoute
 }
 export interface FileRoutesByTo {
@@ -63,6 +71,7 @@ export interface FileRoutesByTo {
   '/wikipage': typeof WikipageRoute
   '/tour/$tourId': typeof TourTourIdRoute
   '/attractions/$tourId/$attractionId': typeof AttractionsTourIdAttractionIdRoute
+  '/places/$tourId/$attractionId': typeof PlacesTourIdAttractionIdRoute
   '/wikipedia/$tourId/$attractionId': typeof WikipediaTourIdAttractionIdRoute
 }
 export interface FileRoutesById {
@@ -72,6 +81,7 @@ export interface FileRoutesById {
   '/wikipage': typeof WikipageRoute
   '/tour/$tourId': typeof TourTourIdRoute
   '/attractions/$tourId/$attractionId': typeof AttractionsTourIdAttractionIdRoute
+  '/places/$tourId/$attractionId': typeof PlacesTourIdAttractionIdRoute
   '/wikipedia/$tourId/$attractionId': typeof WikipediaTourIdAttractionIdRoute
 }
 export interface FileRouteTypes {
@@ -82,6 +92,7 @@ export interface FileRouteTypes {
     | '/wikipage'
     | '/tour/$tourId'
     | '/attractions/$tourId/$attractionId'
+    | '/places/$tourId/$attractionId'
     | '/wikipedia/$tourId/$attractionId'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -90,6 +101,7 @@ export interface FileRouteTypes {
     | '/wikipage'
     | '/tour/$tourId'
     | '/attractions/$tourId/$attractionId'
+    | '/places/$tourId/$attractionId'
     | '/wikipedia/$tourId/$attractionId'
   id:
     | '__root__'
@@ -98,6 +110,7 @@ export interface FileRouteTypes {
     | '/wikipage'
     | '/tour/$tourId'
     | '/attractions/$tourId/$attractionId'
+    | '/places/$tourId/$attractionId'
     | '/wikipedia/$tourId/$attractionId'
   fileRoutesById: FileRoutesById
 }
@@ -107,6 +120,7 @@ export interface RootRouteChildren {
   WikipageRoute: typeof WikipageRoute
   TourTourIdRoute: typeof TourTourIdRoute
   AttractionsTourIdAttractionIdRoute: typeof AttractionsTourIdAttractionIdRoute
+  PlacesTourIdAttractionIdRoute: typeof PlacesTourIdAttractionIdRoute
   WikipediaTourIdAttractionIdRoute: typeof WikipediaTourIdAttractionIdRoute
 }
 
@@ -147,6 +161,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WikipediaTourIdAttractionIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/places/$tourId/$attractionId': {
+      id: '/places/$tourId/$attractionId'
+      path: '/places/$tourId/$attractionId'
+      fullPath: '/places/$tourId/$attractionId'
+      preLoaderRoute: typeof PlacesTourIdAttractionIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/attractions/$tourId/$attractionId': {
       id: '/attractions/$tourId/$attractionId'
       path: '/attractions/$tourId/$attractionId'
@@ -163,6 +184,7 @@ const rootRouteChildren: RootRouteChildren = {
   WikipageRoute: WikipageRoute,
   TourTourIdRoute: TourTourIdRoute,
   AttractionsTourIdAttractionIdRoute: AttractionsTourIdAttractionIdRoute,
+  PlacesTourIdAttractionIdRoute: PlacesTourIdAttractionIdRoute,
   WikipediaTourIdAttractionIdRoute: WikipediaTourIdAttractionIdRoute,
 }
 export const routeTree = rootRouteImport

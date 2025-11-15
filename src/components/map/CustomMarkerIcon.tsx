@@ -3,7 +3,6 @@ import L from "leaflet";
 import { Icon } from "leaflet";
 import { firebaseImage } from "@/lib/utils";
 import type { Attraction } from "@/state/tours";
-import { useTheme } from "@/state/theme-provider";
 
 export function createFirebaseMarkerIcon(
   poi: Attraction,
@@ -68,10 +67,10 @@ export function createIqMarkerIcon(
   const colorHighlight = "#FFD600"; //yellow
   const outlineHighlight = "#000";
   const strokeHighlight = "0.5";
+  //F59E0B88
+  color = theme === "dark" ? "#0070F3" : "#F59E0B";
 
-  color = theme === "dark" ? "#0070F3" : "#ff773c";
-
-  outline = theme === "dark" ? "#fff" : "#000";
+  outline = theme === "dark" ? "#ffffff" : "#000000";
   stroke = theme === "dark" ? "2" : "1";
 
   switch (type) {
