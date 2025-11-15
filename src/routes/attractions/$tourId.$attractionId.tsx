@@ -13,8 +13,8 @@ import {
   MapStateTracker,
   ShowSelectedNearby,
 } from "@/components/map/map";
-import { Marker, useMap } from "react-leaflet";
-import { LatLng, type LatLngExpression } from "leaflet";
+import { Marker } from "react-leaflet";
+import { type LatLngExpression } from "leaflet";
 
 import AttractionAccordion from "@/components/AttractionAccordion";
 import {
@@ -55,13 +55,37 @@ import type { osmPlaceType } from "@/types/LocationIQ";
 export const Route = createFileRoute("/attractions/$tourId/$attractionId")({
   component: RouteComponent,
 
-  validateSearch: (search) => {
+  validateSearch: (
+    search: Record<string, unknown>
+  ): { osm_id: string | null; lat: number | null; lng: number | null } => {
+    // Safely parse and validate each search parameter
+
+    // For osm_id, we just need to ensure it's a string
+    const osm_id =
+      typeof search.osm_id === "string" && search.osm_id ? search.osm_id : null;
+
+    // For lat and lng, we need to parse them from strings to numbers
+    const latStr = search.lat;
+    const lngStr = search.lng;
+
+    const lat = typeof latStr === "string" ? parseFloat(latStr) : NaN;
+    const lng = typeof lngStr === "string" ? parseFloat(lngStr) : NaN;
+
     return {
-      osm_id: (search.osm_id as string) || null,
-      lat: (search.lat as number) || null,
-      lng: (search.lng as number) || null,
+      osm_id: osm_id,
+      // Only return the number if it's valid, otherwise return null. This correctly handles 0.
+      lat: !isNaN(lat) ? lat : null,
+      lng: !isNaN(lng) ? lng : null,
     };
   },
+
+  // validateSearch: (search) => {
+  //   return {
+  //     osm_id: (search.osm_id as string) || null,
+  //     lat: (search.lat as number) || null,
+  //     lng: (search.lng as number) || null,
+  //   };
+  // },
 
   loader: async ({ params }) => {
     return {

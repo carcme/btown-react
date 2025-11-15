@@ -133,6 +133,7 @@ function RouteComponent() {
                   tourId: tourId.toString(),
                   attractionId: tour.attractions[0].id.toString(),
                 }}
+                search={{ osm_id: null, lat: null, lng: null }}
               >
                 Just Start Already
                 <ChevronRight />
@@ -214,6 +215,7 @@ function RouteComponent() {
                     tourId: tourId.toString(),
                     attractionId: tour.attractions[0].id.toString(),
                   }}
+                  search={{ osm_id: null, lat: null, lng: null }}
                 >
                   Begin
                   <ChevronRight />

@@ -16,7 +16,6 @@ import {
 import {
   DivIcon,
   Popup as LeafletPopup,
-  Point,
   type ErrorEvent,
   type LeafletMouseEvent,
   type LocateOptions,
@@ -548,6 +547,7 @@ export const ShowSelectedNearby = ({
   latlng,
   onShown,
 }: showNearbyType) => {
+  console.log("🚀 ~ ShowSelectedNearby ~ osm_id:", osm_id);
   //const map = useMap();
 
   useMap().flyTo(latlng, useMap().getMaxZoom());

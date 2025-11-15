@@ -65,7 +65,7 @@ export function InteractiveButtonGroup({
           <Link
             to="/attractions/$tourId/$attractionId"
             params={{ tourId: tour.toString(), attractionId: prev.toString() }}
-            // close popup so api not called unless asked
+            search={{ osm_id: null, lat: null, lng: null }} // close popup so api not called unless asked
             onClick={() => setBvgRevealed(false)}
           >
             <ChevronLeft />
@@ -129,6 +129,7 @@ export function InteractiveButtonGroup({
             params={{ tourId: tour.toString(), attractionId: next.toString() }}
             // close popup so api not called unless asked
             onClick={() => setBvgRevealed(false)}
+            search={{ osm_id: null, lat: null, lng: null }}
           >
             <ChevronRight />
           </Link>

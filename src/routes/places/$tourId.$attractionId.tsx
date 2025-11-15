@@ -84,7 +84,7 @@ function SearchResultCard({ result }: { result: any }) {
 
   const isGoogleImage = extratags?.image?.includes("photos.app.goo.");
   const isImage = extratags?.image?.includes("commons/thumb/");
-
+  console.log(dummy);
   let commonsImage = undefined;
   let isCommonsPage = false;
   if (!isGoogleImage) {
@@ -441,6 +441,7 @@ function RouteComponent() {
         <Link
           to="/attractions/$tourId/$attractionId"
           params={{ tourId, attractionId }}
+          search={{ osm_id: null, lat: null, lng: null }}
         >
           <Button
             className="absolute top-4 left-4 z-10 bg-background/80"

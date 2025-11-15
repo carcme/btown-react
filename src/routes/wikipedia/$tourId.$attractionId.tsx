@@ -51,6 +51,7 @@ function WikipediaComponent() {
       <Link
         to="/attractions/$tourId/$attractionId"
         params={{ tourId, attractionId }}
+        search={{ osm_id: null, lat: null, lng: null }}
       >
         <Button
           className="absolute top-4 left-4 z-10 bg-background/80"

@@ -185,6 +185,7 @@ const NextStopMap = ({ tourId, attr, nextStop }: MapProps) => {
                   tourId: tourId.toString(),
                   attractionId: (attr.id + 1).toString(),
                 }}
+                search={{ osm_id: null, lat: null, lng: null }}
               >
                 <ChevronRight />
               </Link>

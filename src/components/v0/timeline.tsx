@@ -69,7 +69,7 @@ export function Timeline({ items, className }: TimelineProps) {
               tourId: item.tourId.toString(),
               attractionId: item.id.toString(),
             }}
-            // search={{ tour: 0, attr: item.id }}
+            search={{ osm_id: null, lat: null, lng: null }}
           >
             <div className="relative flex gap-4 space-y-12">
               {/* Timeline line */}
