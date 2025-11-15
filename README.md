@@ -106,3 +106,7 @@ And if you like the project, please give it a ⭐!
 ## 📄 License
 
 This project is licensed under the MIT License. See the `LICENSE` file for details.
+
+## Site View Stats
+
+[Stats from Umami](https://cloud.umami.is/share/Uw3ufQ3YXvh6M8Pi)
