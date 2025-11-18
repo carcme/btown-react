@@ -1,10 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { clsx, type ClassValue } from "clsx";
 import { getDistance } from "geolib";
-import type {
-  GeolibInputCoordinates,
-  UserInputCoordinates,
-} from "geolib/es/types";
+import type { GeolibInputCoordinates } from "geolib/es/types";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {

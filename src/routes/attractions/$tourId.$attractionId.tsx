@@ -51,7 +51,6 @@ import PoiPopupContents from "@/components/map/PoiPopupContents";
 import type { NominatimType } from "@/types/NominatimType";
 import AttractionPopupContents from "@/components/map/AttractionPopupContents";
 import type { osmPlaceType } from "@/types/LocationIQ";
-import UserLocation from "@/components/map/UserLocation";
 
 export const Route = createFileRoute("/attractions/$tourId/$attractionId")({
   component: RouteComponent,

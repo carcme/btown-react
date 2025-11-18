@@ -30,7 +30,6 @@ function App() {
     <>
       {/* <div className="h-14 bg-yellow-400"></div> */}
       <Header />
-
       <Map
         center={BERLIN_CENTER}
         zoom={BERLIN_CENTER.zoom}
