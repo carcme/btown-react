@@ -548,9 +548,11 @@ export const ShowSelectedNearby = ({
   onShown,
 }: showNearbyType) => {
   console.log("🚀 ~ ShowSelectedNearby ~ osm_id:", osm_id);
-  //const map = useMap();
+  const map = useMap();
 
-  useMap().flyTo(latlng, useMap().getMaxZoom());
+  if (latlng) {
+    map.flyTo(latlng, map.getMaxZoom());
+  }
 
   onShown(true);
 

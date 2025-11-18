@@ -75,7 +75,6 @@ async function getThumbnailFromCategory(category, width) {
   return getCommonsThumbnailByFilename(filename, width);
 }
 
-
 export function useCommonsImage(fileUrl, width = 330) {
   const [src, setSrc] = useState(null);
   const [error, setError] = useState(null);
@@ -85,7 +84,7 @@ export function useCommonsImage(fileUrl, width = 330) {
       setSrc(null);
       setError(null);
       return;
-    };
+    }
 
     let isCancelled = false;
 
@@ -98,20 +97,24 @@ export function useCommonsImage(fileUrl, width = 330) {
         if (/^Q\d+$/.test(fileUrl)) {
           console.log("We have a wikiData item: ", fileUrl);
           thumb = await getThumbnailFromWikidata(fileUrl, width);
-        } 
+        }
         // Check for Category (e.g., "Category:Some_Category")
         else if (fileUrl.toLowerCase().startsWith("category:")) {
-          console.log("We have a wiki Category item: ", fileUrl);
+          console.log("We have a wiki Category: item: ", fileUrl);
           thumb = await getThumbnailFromCategory(fileUrl, width);
-        } 
+        }
         // Assume it's a direct File URL
         else if (fileUrl.includes("File:")) {
-           const match = fileUrl.match(/File:(.*)$/);
-           if (!match) throw new Error("Invalid Commons File: URL");
-           const filename = "File:" + decodeURIComponent(match[1]);
-           thumb = await getCommonsThumbnailByFilename(filename, width);
+          console.log("We have a wikiData File: item ", fileUrl);
+          const match = fileUrl.match(/File:(.*)$/);
+          if (!match) throw new Error("Invalid Commons File: URL");
+          const filename = "File:" + decodeURIComponent(match[1]);
+          thumb = await getCommonsThumbnailByFilename(filename, width);
         }
-        else {
+        // Handle direct image URLs
+        else if (fileUrl.startsWith("http")) {
+          thumb = fileUrl;
+        } else {
           throw new Error("Unsupported URL or identifier format");
         }
 

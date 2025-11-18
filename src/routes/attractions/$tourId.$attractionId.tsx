@@ -57,35 +57,20 @@ export const Route = createFileRoute("/attractions/$tourId/$attractionId")({
 
   validateSearch: (
     search: Record<string, unknown>
-  ): { osm_id: string | null; lat: number | null; lng: number | null } => {
-    // Safely parse and validate each search parameter
-
-    // For osm_id, we just need to ensure it's a string
+  ): { osm_id: string | null; lat: string | null; lng: string | null } => {
     const osm_id =
       typeof search.osm_id === "string" && search.osm_id ? search.osm_id : null;
-
-    // For lat and lng, we need to parse them from strings to numbers
-    const latStr = search.lat;
-    const lngStr = search.lng;
-
-    const lat = typeof latStr === "string" ? parseFloat(latStr) : NaN;
-    const lng = typeof lngStr === "string" ? parseFloat(lngStr) : NaN;
+    const lat =
+      typeof search.lat === "string" && search.lat ? search.lat : null;
+    const lng =
+      typeof search.lng === "string" && search.lng ? search.lng : null;
 
     return {
       osm_id: osm_id,
-      // Only return the number if it's valid, otherwise return null. This correctly handles 0.
-      lat: !isNaN(lat) ? lat : null,
-      lng: !isNaN(lng) ? lng : null,
+      lat: lat,
+      lng: lng,
     };
   },
-
-  // validateSearch: (search) => {
-  //   return {
-  //     osm_id: (search.osm_id as string) || null,
-  //     lat: (search.lat as number) || null,
-  //     lng: (search.lng as number) || null,
-  //   };
-  // },
 
   loader: async ({ params }) => {
     return {
@@ -144,14 +129,20 @@ function RouteComponent() {
   const headerCSS = visible ? "top-0" : "-top-20";
 
   useEffect(() => {
-    if (osm_id) {
+    console.log(`${osm_id} ${lat} ${lng}`);
+    const latlng =
+      lat !== null && lng !== null ? [parseFloat(lat), parseFloat(lng)] : null;
+    if (osm_id && latlng !== null) {
       setMapOpen(true);
+
       setTimeout(() => {
-        console.log("🚀 ~ RouteComponent ~ lat, lng:", lat, lng);
-        setOsmPlace({ osm_id: osm_id, latlng: [lat, lng] as LatLngExpression });
-      }, 330);
+        setOsmPlace({
+          osm_id: osm_id,
+          latlng: latlng as LatLngExpression,
+        });
+      }, 350);
     }
-  }, [tour, lang, osm_id]);
+  }, [tour, lang, osm_id, lat, lng]);
 
   return (
     <div className="relative">

@@ -15,57 +15,6 @@ import { Badge } from "@/components/ui/badge";
 import { CommonsImage } from "@/components/CommonsImage";
 import { ImageZoom } from "@/components/ui/image-zoom";
 
-const dummy = [
-  {
-    place_id: "144736527",
-    licence: "https://locationiq.com/attribution",
-    osm_type: "way",
-    osm_id: "556435241",
-    boundingbox: ["52.5206838", "52.5209557", "13.4091976", "13.409645"],
-    lat: "52.5208279",
-    lon: "13.409421365810083",
-    display_name:
-      "Fernsehturm Berlin, 1a, Panoramastraße, Nikolaiviertel, Mitte, Berlin, 10178, Germany",
-    class: "tourism",
-    type: "attraction",
-    importance: 1,
-    icon: "https://locationiq.org/static/images/mapicons/poi_point_of_interest.p.20.png",
-    extratags: {
-      ele: "40",
-      image: "https://photos.app.goo.gl/U7sc3WznysabM3ox5",
-      layer: "2",
-      height: "368",
-      building: "tower",
-      man_made: "communications_tower",
-      nickname: "Telespargel",
-      operator: "Deutsche Funkturm GmbH",
-      wikidata: "Q151356",
-      viewpoint: "yes",
-      wikipedia: "de:Berliner Fernsehturm",
-      start_date: "1969",
-      "tower:type": "communication",
-      wheelchair: "no",
-      "seamark:name": "Fernsehturm",
-      "seamark:type": "landmark",
-      "contact:website": "https://www.tv-turm.de/",
-      "contact:facebook": "https://www.facebook.com/BerlinerFernsehturm",
-      "contact:instagram": "https://www.instagram.com/berliner_fernsehturm/",
-      wikimedia_commons: "Category:Berliner Fernsehturm",
-      "toilets:wheelchair": "no",
-      "communication:radio": "yes",
-      "seamark:light:range": "8",
-      "seamark:light:colour": "red",
-      "seamark:light:height": "205",
-      "seamark:light:category": "vertical",
-      "communication:microwave": "yes",
-      "seamark:light:character": "F",
-      "communication:television": "yes",
-      "seamark:landmark:category": "tower",
-      "seamark:landmark:function": "communication",
-      "communications_transponder:service": "DAB+",
-    },
-  },
-];
 /* 
   isImage = https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Urania-Weltzeituhr_auf_dem_Alexanderplatz_in_Berlin_2015.jpg/800px-Urania-Weltzeituhr_auf_dem_Alexanderplatz_in_Berlin_2015.jpg
 
@@ -77,32 +26,30 @@ const dummy = [
 */
 
 function SearchResultCard({ result }: { result: any }) {
-  const { display_name, extratags, type, osm_id } = result;
+  const { display_name, extratags, type, osm_id, lat, lon } = result;
   const { tourId, attractionId } = Route.useParams();
 
   const title = display_name.split(",")[0];
 
-  const isGoogleImage = extratags?.image?.includes("photos.app.goo.");
-  const isImage = extratags?.image?.includes("commons/thumb/");
-  console.log(dummy);
-  let commonsImage = undefined;
-  let isCommonsPage = false;
-  if (!isGoogleImage) {
-    if (isImage) {
-      // we have an image!!
-      commonsImage = extratags?.image;
-    }
-  } else {
-    isCommonsPage =
-      extratags?.image?.toLowerCase().includes("file:") ||
-      extratags?.wikimedia_commons?.toLowerCase().includes("category:");
+  const isGoogleImage = extratags?.image?.includes("photos.app.goo.")
+    ? true
+    : false;
+  const isImage = extratags?.image ? true : false;
+  const haveWikiData = extratags?.wikidata ? true : false;
+  const haveWikiCommons = extratags?.wikimedia_commons ? true : false;
 
-    // we have an image!!
-    commonsImage =
-      (!isGoogleImage && extratags?.image) || extratags?.wikimedia_commons;
-    if (!commonsImage && extratags.wikidata) {
-      commonsImage = extratags.wikidata;
-    }
+  let isCommonsPage = false;
+  let commonsImage = undefined;
+
+  if (isImage && !isGoogleImage) {
+    isCommonsPage = true;
+    commonsImage = extratags.image;
+  } else if (haveWikiCommons) {
+    isCommonsPage = true;
+    commonsImage = extratags.wikimedia_commons;
+  } else if (haveWikiData) {
+    isCommonsPage = true;
+    commonsImage = extratags?.wikidata;
   }
 
   return (
@@ -131,22 +78,27 @@ function SearchResultCard({ result }: { result: any }) {
         <CardTitle className="pt-4">{title}</CardTitle>
       </CardHeader>
       <CardContent>
-        {!isGoogleImage && !isCommonsPage && extratags.image && (
+        {/* {!isGoogleImage &&
+          !isCommonsPage &&
+          extratags.image &&
+          commonsImage == undefined && (
+            <ImageZoom>
+              <img
+                src={extratags.image}
+                alt={title}
+                className="w-full h-48 object-cover rounded-t-xl mb-2"
+              />
+            </ImageZoom>
+          )} */}
+        {isCommonsPage && (
           <ImageZoom>
-            <img
-              src={extratags.image}
-              alt={title}
-              className="w-full h-48 object-cover rounded-t-xl mb-2"
+            <CommonsImage
+              url={commonsImage}
+              width={400}
+              alt=""
+              className="w-full h-48 object-cover rounded-t-md mb-1"
             />
           </ImageZoom>
-        )}
-        {isCommonsPage && (
-          <CommonsImage
-            url={commonsImage}
-            width={400}
-            alt=""
-            className="w-full h-48 object-cover rounded-t-xl mb-2"
-          />
         )}
         <p className="text-sm text-muted-foreground mb-4">{display_name}</p>
         <p className="text-sm text-muted-foreground mb-4">
@@ -321,15 +273,19 @@ function SearchResultCard({ result }: { result: any }) {
         <div className="flex justify-end pt-10">
           <Link
             to="/attractions/$tourId/$attractionId"
+            search={{
+              osm_id: osm_id as string,
+              lat: lat as string,
+              lng: lon as string,
+            }}
             params={{ tourId, attractionId }}
-            search={{ osm_id: osm_id, lat: result.lat, lng: result.lon }}
           >
             <Button
               className="absolute bottom-8 right-8"
               variant="berlin"
-              size="icon"
+              size="sm"
             >
-              <Map />
+              <Map /> Map
             </Button>
           </Link>
         </div>
@@ -366,7 +322,7 @@ function RouteComponent() {
   const { data: locationIQPlaces } = useIqPlaces();
   const [filter, setFilter] = useState<string | null>(null);
   const [searchResult, setSearchResult] = useState<any>([]);
-  const [showResults, setShowResults] = useState(true);
+  const [showResults, setShowResults] = useState(false);
   const [error, setError] = useState<ErrorParams | null>(null);
 
   if (!locationIQPlaces) {
@@ -397,7 +353,7 @@ function RouteComponent() {
       // }
       // console.log("🚀 ~ handlePlaceClick ~ searchStr:", searchStr);
 
-      const searchStr = `${place.osm_type.charAt(0)}${place.osm_id}`;
+      const searchStr = `${place.osm_type.charAt(0).toUpperCase()}${place.osm_id}`;
       console.log(searchStr);
 
       //https:eu1.locationiq.com/v1
@@ -412,7 +368,6 @@ function RouteComponent() {
       });
       setSearchResult(response.data);
       setShowResults(true);
-      console.log("LocationIQ Search Result:", response.data);
     } catch (error) {
       console.error("Error fetching LocationIQ search:", error);
       setError({

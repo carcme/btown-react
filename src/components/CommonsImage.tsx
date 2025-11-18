@@ -44,7 +44,7 @@ export function CommonsImage({
         src={src}
         width={width}
         alt={fallbackAlt}
-        className={(cn("rounded-lg"), className)}
+        className={cn("", className)}
         loading="lazy"
       />
     </ImageZoom>

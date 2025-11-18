@@ -1,4 +1,4 @@
-//import type { LocationIQPlaceType } from "@/types/LocationIQ";
+import type { LocationIQPlaceType } from "@/types/LocationIQ";
 import type { NominatimType } from "@/types/NominatimType";
 
 export const dummyWikiPage = {
@@ -86,8 +86,8 @@ export const dummyNominatim: NominatimType = {
   },
   boundingbox: ["52.5203876", "52.5207123", "13.4066180", "13.4078168"],
 };
-/*
-export const dummyIQData: LocationIQPlaceType = [
+
+export const dummyIQData: LocationIQPlaceType[] = [
   {
     place_id: "321248273759",
     osm_id: "7937325270",
@@ -341,4 +341,5 @@ export const dummyIQData: LocationIQPlaceType = [
     distance: 78,
   },
 ];
-*/
+
+

@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WikipageRouteImport } from './routes/wikipage'
 import { Route as ThemeRouteImport } from './routes/theme'
+import { Route as TestCommonsRouteImport } from './routes/test-commons'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TourTourIdRouteImport } from './routes/tour/$tourId'
 import { Route as WikipediaTourIdAttractionIdRouteImport } from './routes/wikipedia/$tourId.$attractionId'
@@ -25,6 +26,11 @@ const WikipageRoute = WikipageRouteImport.update({
 const ThemeRoute = ThemeRouteImport.update({
   id: '/theme',
   path: '/theme',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TestCommonsRoute = TestCommonsRouteImport.update({
+  id: '/test-commons',
+  path: '/test-commons',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -58,6 +64,7 @@ const AttractionsTourIdAttractionIdRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/test-commons': typeof TestCommonsRoute
   '/theme': typeof ThemeRoute
   '/wikipage': typeof WikipageRoute
   '/tour/$tourId': typeof TourTourIdRoute
@@ -67,6 +74,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/test-commons': typeof TestCommonsRoute
   '/theme': typeof ThemeRoute
   '/wikipage': typeof WikipageRoute
   '/tour/$tourId': typeof TourTourIdRoute
@@ -77,6 +85,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/test-commons': typeof TestCommonsRoute
   '/theme': typeof ThemeRoute
   '/wikipage': typeof WikipageRoute
   '/tour/$tourId': typeof TourTourIdRoute
@@ -88,6 +97,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/test-commons'
     | '/theme'
     | '/wikipage'
     | '/tour/$tourId'
@@ -97,6 +107,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/test-commons'
     | '/theme'
     | '/wikipage'
     | '/tour/$tourId'
@@ -106,6 +117,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/test-commons'
     | '/theme'
     | '/wikipage'
     | '/tour/$tourId'
@@ -116,6 +128,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  TestCommonsRoute: typeof TestCommonsRoute
   ThemeRoute: typeof ThemeRoute
   WikipageRoute: typeof WikipageRoute
   TourTourIdRoute: typeof TourTourIdRoute
@@ -138,6 +151,13 @@ declare module '@tanstack/react-router' {
       path: '/theme'
       fullPath: '/theme'
       preLoaderRoute: typeof ThemeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/test-commons': {
+      id: '/test-commons'
+      path: '/test-commons'
+      fullPath: '/test-commons'
+      preLoaderRoute: typeof TestCommonsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -180,6 +200,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  TestCommonsRoute: TestCommonsRoute,
   ThemeRoute: ThemeRoute,
   WikipageRoute: WikipageRoute,
   TourTourIdRoute: TourTourIdRoute,

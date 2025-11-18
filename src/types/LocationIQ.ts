@@ -33,6 +33,7 @@ export interface LocationIQPlaceType {
 
 export interface IqAddressType {
   name: string;
+  house_number?: string;
   road: string;
   suburb: string;
   city: string;
@@ -42,6 +43,6 @@ export interface IqAddressType {
 }
 
 export interface osmPlaceType {
-  osm_id: string;
-  latlng: LatLngExpression;
+  osm_id: string | null;
+  latlng: LatLngExpression | null;
 }
