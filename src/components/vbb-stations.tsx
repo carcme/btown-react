@@ -7,7 +7,7 @@ import {
   BerlinUBahn,
 } from "@/assets/svgIcons";
 import { Spinner } from "./ui/spinner";
-import { useVbbStations } from "@/state/wiki";
+import { useVbbStations } from "@/state/storeCreate";
 import AlertBox from "./AlertBox";
 
 export interface LineType {

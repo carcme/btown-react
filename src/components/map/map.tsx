@@ -1,4 +1,4 @@
-import React, { useEffect, useState, type Ref } from "react";
+import React, { useEffect, useState, type Ref, useRef } from "react";
 import { useTheme } from "@/state/theme-provider";
 import {
   MapContainer,
@@ -14,7 +14,9 @@ import {
 } from "react-leaflet";
 
 import {
+  DomEvent,
   DivIcon,
+  LatLng,
   Popup as LeafletPopup,
   type ErrorEvent,
   type LeafletMouseEvent,
@@ -44,7 +46,7 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { Badge } from "../ui/badge";
-import { useIqPlaces } from "@/state/wiki";
+import { useIqPlaces } from "@/state/storeCreate";
 import { Link } from "@tanstack/react-router";
 import { DivIconToSvgIcon } from "../icons/DivIconToSvg";
 
@@ -142,13 +144,21 @@ export function MapZoomControl({
     onLocationFound?: (location: LocationEvent) => void;
     onLocationError?: (error: ErrorEvent) => void;
   }) {
+  const map = useMap();
   const { setUserLocation } = useUserLocation();
+  const [zoomLevel, setZoomLevel] = useState(map.getZoom());
 
   const [position, setUserPosition] = useState<LatLngExpression | null>(null);
   const [userAccuracy, setaccuracy] = useState<number | null>(null);
   const [isLocating, setIsLocating] = useDebounceLoadingState(200);
 
-  const map = useMap();
+  const controlRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (controlRef.current) {
+      DomEvent.disableClickPropagation(controlRef.current);
+    }
+  }, []);
 
   function startLocating() {
     setIsLocating(true);
@@ -180,6 +190,12 @@ export function MapZoomControl({
     return () => stopLocating();
   }, []);
 
+  useMapEvents({
+    zoomend: () => {
+      setZoomLevel(map.getZoom());
+    },
+  });
+
   return (
     <>
       {position && userAccuracy && (
@@ -204,7 +220,6 @@ export function MapZoomControl({
                 <p className="text-lg">Your Location</p>
               </div>
             </MapPopup>
-            {/* <MapPopup>You Are Here</MapPopup> */}
           </CircleMarker>
         </>
       )}
@@ -219,6 +234,7 @@ export function MapZoomControl({
       )}
 
       <ButtonGroup
+        ref={controlRef}
         orientation="uniform"
         aria-label="Map controls"
         className={cn(
@@ -231,6 +247,7 @@ export function MapZoomControl({
         <Button
           size="icon"
           variant="outline"
+          disabled={zoomLevel >= map.getMaxZoom()}
           onClick={() => {
             map.zoomIn();
           }}
@@ -241,6 +258,7 @@ export function MapZoomControl({
         <Button
           size="icon"
           variant="outline"
+          disabled={zoomLevel <= map.getMinZoom()}
           onClick={() => {
             map.zoomOut();
           }}
@@ -271,7 +289,7 @@ export function MapZoomControl({
             className={cn(
               "",
               position &&
-                "ring dark:ring-location/40 ring-location dark:bg-location/40 bg-location rounded-full"
+                "ring dark:ring-location/40 ring-location dark:bg-location/40 bg-location rounded-full "
             )}
           >
             {isLocating ? (
@@ -302,6 +320,7 @@ export function MapWikiButton({
   const [loading, setLoading] = useState(false);
   const [hasData, setHasData] = useState(displaying);
   const { location } = useUserLocation();
+  const controlRef = useRef<HTMLDivElement>(null);
   const map = useMap();
 
   const handleLookup = async () => {
@@ -312,7 +331,7 @@ export function MapWikiButton({
       try {
         setLoading(true);
         const center = map.getCenter(); //const center = location ? location : map.getCenter();
-        const centerLatLng = center as L.LatLng;
+        const centerLatLng = center as LatLng;
         const lat = centerLatLng.lat;
         const lng = centerLatLng.lng;
         const thumbsize = 480;
@@ -334,8 +353,15 @@ export function MapWikiButton({
       }
   };
 
+  useEffect(() => {
+    if (controlRef.current) {
+      DomEvent.disableClickPropagation(controlRef.current);
+    }
+  }, []);
+
   return (
     <div
+      ref={controlRef}
       className={cn(
         "absolute flex flex-col items-center gap-2 rounded-2xl bg-background/60 p-2 shadow-lg transition-all duration-200 z-1000 top-auto left-4 bottom-4 right-auto",
         loading && "ring-1 ring-location/40",

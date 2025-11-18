@@ -11,28 +11,12 @@ import { Compass, ArrowDown, Landmark } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import WikiIcon from "./WikiIcon";
 import { useMap } from "react-leaflet";
-import { getDistance } from "geolib";
 import { useUserLocation } from "../../state/location-provider";
 import { useLanguage } from "@/state/lang-provider";
 import NoImage from "@/assets/no_image.png";
 import CloudinaryImage from "../CloudinaryImage";
 import { BtownIcon } from "@/assets/svgIcons";
-
-function calcDistance(latlng1, latlng2) {
-  const map = useMap();
-  map.stopLocate();
-  map.off("locationfound");
-  map.off("locationerror");
-  let distance = map.distance(latlng1, latlng2);
-  if (distance / 1000 > 100) {
-    return ">100 km";
-  } else if (distance / 1000 > 1) {
-    distance = (distance / 1000).toFixed(1);
-    return distance.toString() + " km";
-  } else {
-    return distance.toFixed(0).toString() + " m";
-  }
-}
+import { getDist } from "@/lib/utils";
 
 /**
  * Used on: Main page map,
@@ -43,15 +27,10 @@ const AttractionPopupContents = ({ attr }) => {
   const { location } = useUserLocation();
   const map = useMap();
 
-  let meters = getDistance(attr.location, location);
-  if (meters > 1000) {
-    meters = (meters / 1000).toFixed(1) + " km";
-  } else {
-    meters = meters + " m";
-  }
+  let meters = getDist(attr.location, location);
 
   useEffect(() => {
-    meters = getDistance(attr.location, location);
+    meters = getDist(attr.location, location);
   }, [location]);
 
   console.log(attr);

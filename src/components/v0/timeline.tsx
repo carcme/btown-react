@@ -6,13 +6,12 @@ import {
   type LucideIcon,
 } from "lucide-react";
 
-import { cn } from "@/lib/utils";
+import { cn, getDist } from "@/lib/utils";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { Badge } from "../ui/badge";
 import { Link } from "@tanstack/react-router";
 import type { LatLngExpression } from "leaflet";
 import type { Location } from "@/state/tours";
-import { getDistance } from "geolib";
 
 export interface TimelineItem {
   tourId: number;
@@ -36,11 +35,7 @@ interface TimelineProps {
 }
 
 function distance(latlng1: LatLngExpression, latlng2: Location) {
-  let meters = getDistance(latlng1, latlng2);
-  if (meters > 1000) {
-    return (meters / 1000).toFixed(1) + " km";
-  }
-  return meters + " m";
+  return getDist(latlng1, latlng2);
 }
 
 export const TourTimeline = ({ items }: { items: TimelineItem[] }) => {

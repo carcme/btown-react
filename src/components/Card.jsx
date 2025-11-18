@@ -2,8 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useDistance } from "../lib/mapsUtils";
 import { useUserLocation } from "../state/location-provider";
 import { useEffect } from "react";
-import { getDistance } from "geolib";
-import { getCloudImage } from "@/lib/utils";
+import { getCloudImage, getDist } from "@/lib/utils";
 import CloudinaryImage from "./CloudinaryImage";
 
 const Card = ({ id, title, desc, brief, type, img, alt, latlng }) => {
@@ -11,12 +10,12 @@ const Card = ({ id, title, desc, brief, type, img, alt, latlng }) => {
 
   useEffect(() => {}, [location]);
 
-  let meters = getDistance(latlng, location);
-  if (meters > 1000) {
-    meters = (meters / 1000).toFixed(1) + " km";
-  } else {
-    meters = meters + " m";
-  }
+  let meters = getDist(latlng, location);
+  // if (meters > 1000) {
+  //   meters = (meters / 1000).toFixed(1) + " km";
+  // } else {
+  //   meters = meters + " m";
+  // }
 
   return (
     <div className="p-4 lg:max-w-96 mx-auto">

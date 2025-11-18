@@ -1,6 +1,6 @@
 import { createFileRoute, useLocation, Link } from "@tanstack/react-router";
 import type { WikiPageType } from "@/types/WikiType";
-import { useWikiPages } from "@/state/wiki";
+import { useWikiPages } from "@/state/storeCreate";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { useEffect } from "react";

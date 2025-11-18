@@ -1,4 +1,4 @@
-import { useIqPlaces } from "@/state/wiki";
+import { useIqPlaces } from "@/state/storeCreate";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -14,16 +14,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { CommonsImage } from "@/components/CommonsImage";
 import { ImageZoom } from "@/components/ui/image-zoom";
-
-/* 
-  isImage = https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Urania-Weltzeituhr_auf_dem_Alexanderplatz_in_Berlin_2015.jpg/800px-Urania-Weltzeituhr_auf_dem_Alexanderplatz_in_Berlin_2015.jpg
-
- isCommonsPage = https://commons.wikimedia.org/wiki/File:Berlin-Volksbuehne_am_Rosa-Luxemburg-Platz-06-2006-gje.jpg
-
- isGoogleImage = "https://photos.app.goo.gl/z7Eax1mrm2Wafqpw8"
-
- https://commons.wikimedia.org/wiki/File:Berlin-Volksbuehne_am_Rosa-Luxemburg-Platz-06-2006-gje.jpg
-*/
 
 function SearchResultCard({ result }: { result: any }) {
   const { display_name, extratags, type, osm_id, lat, lon } = result;
@@ -50,8 +40,10 @@ function SearchResultCard({ result }: { result: any }) {
   } else if (haveWikiData) {
     isCommonsPage = true;
     commonsImage = extratags?.wikidata;
+  } else if (extratags["genus:wikidata"]) {
+    isCommonsPage = true;
+    commonsImage = extratags["genus:wikidata"];
   }
-
   return (
     <Card key={osm_id}>
       <CardHeader className="relative">
@@ -340,20 +332,10 @@ function RouteComponent() {
       setError(null);
       setShowResults(false);
 
-      // "https://api.locationiq.com/v1/search.php",
-      // const searchStr = `${place.address.name},${place.address.road},${
-      //   place.address.city
-      // }`;
-      // if (searchStr.includes("undefined")) {
-      //   setError({
-      //     title: "Search Failed",
-      //     desc: "The search parameters are incomplete",
-      //   });
-      //   return;
-      // }
-      // console.log("🚀 ~ handlePlaceClick ~ searchStr:", searchStr);
+      const searchStr = `${place.osm_type.charAt(0).toUpperCase()}${
+        place.osm_id
+      }`;
 
-      const searchStr = `${place.osm_type.charAt(0).toUpperCase()}${place.osm_id}`;
       console.log(searchStr);
 
       //https:eu1.locationiq.com/v1
@@ -379,7 +361,7 @@ function RouteComponent() {
 
   const tagTypes = [
     ...new Set(locationIQPlaces.map((place) => place.tag_type)),
-  ];
+  ].sort();
 
   const filteredPlaces = filter
     ? locationIQPlaces.filter((place) => place.tag_type === filter)
@@ -454,30 +436,34 @@ function RouteComponent() {
       )}
 
       <ul className="space-y-4">
-        {filteredPlaces.map((place) => (
-          <li
-            // place_id alone isn't always unique
-            key={place.place_id + place.osm_id}
-            className="flex items-center gap-4 p-2 border rounded-md cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800"
-            onClick={() => handlePlaceClick(place)}
-          >
-            {place.icon?.options.html && (
-              <DivIconToSvgIcon
-                svg={place.icon?.options.html}
-                className="w-8 h-8"
-              />
-            )}
-            <div className="w-full text-sm">
-              <p className="font-bold ">{place.name}</p>
-              <p className="text-sm text-muted-foreground">
-                {place.address.road}, {place.address.suburb}
-              </p>
-            </div>
-            <p className="text-sm min-w-20">
-              {getDist([place.lat, place.lon], location)}
-            </p>
-          </li>
-        ))}
+        {filteredPlaces.map((place) => {
+          const dist = getDist(
+            [parseFloat(place.lat), parseFloat(place.lon)],
+            location
+          );
+          return (
+            <li
+              // place_id alone isn't always unique
+              key={place.place_id + place.osm_id}
+              className="flex items-center gap-4 p-2 border rounded-md cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800"
+              onClick={() => handlePlaceClick(place)}
+            >
+              {place.icon?.options.html && (
+                <DivIconToSvgIcon
+                  svg={place.icon?.options.html}
+                  className="w-8 h-8"
+                />
+              )}
+              <div className="w-full text-sm">
+                <p className="font-bold ">{place.name}</p>
+                <p className="text-sm text-muted-foreground">
+                  {place.address.road}, {place.address.suburb}
+                </p>
+              </div>
+              <p className="text-sm min-w-20">{dist}</p>
+            </li>
+          );
+        })}
       </ul>
     </div>
   );

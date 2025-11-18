@@ -18,7 +18,7 @@ type LocationProviderState = {
 
 const initialState: LocationProviderState = {
   location: defaultCenter,
-  setUserLocation: () => location,
+  setUserLocation: () => {},
 };
 
 const LocationProviderContext =

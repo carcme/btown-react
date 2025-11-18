@@ -39,7 +39,7 @@ import { ArrowLeft, CircleX, Expand, Shrink, MapPin } from "lucide-react";
 import { ButtonGroup } from "@/components/ui/button-group";
 import { useLocalStorage } from "@/state/useLocalStorage";
 import WikiPopupContents from "@/components/map/WikiPopupContents";
-import { useIqPlaces, useWikiPages } from "@/state/wiki";
+import { useIqPlaces, useWikiPages } from "@/state/storeCreate";
 import type { WikiPageType } from "@/types/WikiType";
 import type { Poi } from "@/state/tours";
 
@@ -51,6 +51,7 @@ import PoiPopupContents from "@/components/map/PoiPopupContents";
 import type { NominatimType } from "@/types/NominatimType";
 import AttractionPopupContents from "@/components/map/AttractionPopupContents";
 import type { osmPlaceType } from "@/types/LocationIQ";
+import UserLocation from "@/components/map/UserLocation";
 
 export const Route = createFileRoute("/attractions/$tourId/$attractionId")({
   component: RouteComponent,
@@ -228,13 +229,14 @@ function RouteComponent() {
                   <MapStateTracker setPopupOpen={setIsPopupOpen} />
 
                   <MapZoomControl className="top-auto right-4 bottom-4 left-auto" />
+                  {/* <UserLocation /> */}
+
                   <LeafletRightClickProvider>
                     <Toaster />
                     <MapRightClick
                       onResult={(data) => {
                         if (data === null) {
                           console.log("data is null");
-                          l: return;
                         } else {
                           console.log("🚀 ~ MapRightClick ~ data:", data);
                           setNominatimData(data);
