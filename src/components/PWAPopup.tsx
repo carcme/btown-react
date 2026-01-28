@@ -38,7 +38,7 @@ export function PWAPopup() {
     // For debugging, we can add a button to reset the dismissed state.
     if (process.env.NODE_ENV === "development") {
       return (
-        <div className="fixed bottom-1 right-1 bg-background border border-berlin rounded-lg p-1 max-w-sm z-10">
+        <div className="fixed bottom-1 right-1 bg-background border border-berlin rounded-lg p-1 max-w-sm z-500">
           <p className="text-sm text-muted-foreground">PWA popup hidden. </p>
           <Button onClick={handleReset} variant="link" className="text-berlin">
             Reset
@@ -49,7 +49,7 @@ export function PWAPopup() {
     return null;
   } else
     return (
-      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-4/5 bg-background border border-berlin shadow-lg rounded-lg p-4 min-w-xs max-w-sm z-10">
+      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-4/5 bg-background border border-berlin shadow-lg rounded-lg p-4 min-w-xs max-w-sm z-500">
         <div className="flex justify-between items-start">
           <div className="pr-4">
             <h3 className="font-semibold">Install App</h3>
