@@ -3,9 +3,12 @@ import { Link } from "@tanstack/react-router";
 import { firebaseImage } from "@/lib/utils";
 import { AdvancedImage } from "@cloudinary/react";
 import CloudinaryImage from "./CloudinaryImage";
+import { useIsMobile } from "@/lib/isMobile";
 
 const SummaryListItem = ({ tourID, poi }) => {
   const stopImage = firebaseImage(poi.stopImageFile);
+  const isMobile = useIsMobile();
+  const imageSize = isMobile ? 300 : 800;
 
   return (
     <>
@@ -14,7 +17,7 @@ const SummaryListItem = ({ tourID, poi }) => {
           <div className="shrink-0 flex items-center ">
             <CloudinaryImage
               publicId={poi.stopImageFile}
-              w={600}
+              w={imageSize}
               alt={poi.stopName}
               className="rounded-full w-69 h-24 object-cover"
             />

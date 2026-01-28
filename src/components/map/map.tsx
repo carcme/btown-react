@@ -112,8 +112,8 @@ export function MapPopup({
   return (
     <Popup
       className={cn(
-        "flex flex-col bg-popover text-popover-foreground w-72 rounded-md border p-4 font-grotesk shadow-md outline-hidden",
-        className
+        "flex flex-col bg-popover text-popover-foreground w-72 rounded-md border p-4 font-spinnaker shadow-md outline-hidden",
+        className,
       )}
       {...props}
     />
@@ -240,7 +240,7 @@ export function MapZoomControl({
         className={cn(
           "absolute flex flex-col items-center gap-2 rounded-2xl bg-background/60 p-2 shadow-lg transition-all duration-200 z-400 top-auto right-4 bottom-4 left-auto",
           position && "ring-1 ring-location/40",
-          className
+          className,
         )}
         {...props}
       >
@@ -289,7 +289,7 @@ export function MapZoomControl({
             className={cn(
               "",
               position &&
-                "ring dark:ring-location/40 ring-location dark:bg-location/40 bg-location rounded-full "
+                "ring dark:ring-location/40 ring-location dark:bg-location/40 bg-location rounded-full ",
             )}
           >
             {isLocating ? (
@@ -365,7 +365,7 @@ export function MapWikiButton({
       className={cn(
         "absolute flex flex-col items-center gap-2 rounded-2xl bg-background/60 p-2 shadow-lg transition-all duration-200 z-1000 top-auto left-4 bottom-4 right-auto",
         loading && "ring-1 ring-location/40",
-        className
+        className,
       )}
       {...props}
     >
@@ -379,7 +379,7 @@ export function MapWikiButton({
           "hover:scale-105 transition-transform ",
 
           hasData &&
-            "ring dark:ring-location/40 ring-location dark:bg-location/40 bg-location rounded-full"
+            "ring dark:ring-location/40 ring-location dark:bg-location/40 bg-location rounded-full",
         )}
       >
         {loading ? (
@@ -513,7 +513,7 @@ export const SearchNearby = ({
               tag: tags,
               format: "json",
             },
-          }
+          },
         );
 
         const places = response.data?.map((place: LocationIQPlaceType) => {

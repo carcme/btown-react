@@ -388,7 +388,7 @@ function RouteComponent() {
             <ArrowLeft />
           </Button>
         </Link>
-        <h3 className="absolute top-5 left-16 text-xl font-grotesk">
+        <h3 className="absolute top-5 left-16 text-xl font-spinnaker">
           Nearby Places
         </h3>
       </div>
@@ -439,7 +439,7 @@ function RouteComponent() {
         {filteredPlaces.map((place) => {
           const dist = getDist(
             [parseFloat(place.lat), parseFloat(place.lon)],
-            location
+            location,
           );
           return (
             <li

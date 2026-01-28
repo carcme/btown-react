@@ -10,13 +10,13 @@ import { Compass, ArrowDown, Landmark } from "lucide-react";
 
 import { Link } from "@tanstack/react-router";
 import WikiIcon from "./WikiIcon";
-import { useMap } from "react-leaflet";
 import { useUserLocation } from "../../state/location-provider";
 import { useLanguage } from "@/state/lang-provider";
 import NoImage from "@/assets/no_image.png";
 import CloudinaryImage from "../CloudinaryImage";
 import { BtownIcon } from "@/assets/svgIcons";
 import { getDist } from "@/lib/utils";
+import { useIsMobile } from "@/lib/isMobile";
 
 /**
  * Used on: Main page map,
@@ -25,7 +25,9 @@ import { getDist } from "@/lib/utils";
  */
 const AttractionPopupContents = ({ attr }) => {
   const { location } = useUserLocation();
-  const map = useMap();
+
+  const isMobile = useIsMobile();
+  const imageSize = isMobile ? 300 : 800;
 
   let meters = getDist(attr.location, location);
 
@@ -52,7 +54,7 @@ const AttractionPopupContents = ({ attr }) => {
         <div className="relative bg-muted mt-4 aspect-video w-full rounded-xl">
           <CloudinaryImage
             publicId={attr.stopImageFile}
-            w={300}
+            w={imageSize}
             alt={attr.stopImageFile}
             className="aspect-video w-92 rounded-md object-cover"
           />

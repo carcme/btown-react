@@ -7,7 +7,7 @@ import type { Attraction } from "@/state/tours";
 export function createFirebaseMarkerIcon(
   poi: Attraction,
   height: number,
-  width: number
+  width: number,
 ) {
   const customIcon = new Icon({
     iconUrl: firebaseImage(poi.stopImageFile),
@@ -25,12 +25,12 @@ export function createFirebaseMarkerIcon(
 }
 
 export function createWikiMarkerIcon() {
-  const svgTemplate = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="24" height="24"  style="opacity:1;"><path fill="#CFD8DC" d="M6 10a4 4 0 0 1 4-4h28a4 4 0 0 1 4 4v28a4 4 0 0 1-4 4H10a4 4 0 0 1-4-4z"/><path fill="#37474F" d="M39 17.271a.34.34 0 0 1-.334.349h-1.799l-8.164 18.179c-.052.12-.17.2-.297.202h-.004a.33.33 0 0 1-.298-.193l-3.874-8.039l-4.18 8.049a.33.33 0 0 1-.303.184a.34.34 0 0 1-.292-.199l-8.252-18.182h-1.87a.345.345 0 0 1-.333-.35v-.921a.34.34 0 0 1 .333-.35h6.657a.34.34 0 0 1 .333.35v.921a.34.34 0 0 1-.333.349h-1.433l5.696 13.748l2.964-5.793l-3.757-7.953h-.904a.34.34 0 0 1-.333-.35v-.922c0-.191.149-.348.333-.348h4.924a.34.34 0 0 1 .333.348v.922c0 .192-.149.35-.333.35h-.867l2.162 4.948l2.572-4.948H25.77a.34.34 0 0 1-.334-.35v-.922a.34.34 0 0 1 .334-.348h4.784c.187 0 .333.156.333.348v.922a.34.34 0 0 1-.333.35h-1.05l-3.757 7.141l3.063 6.584l5.905-13.725h-1.872a.343.343 0 0 1-.334-.35v-.922c0-.191.15-.348.334-.348h5.822a.34.34 0 0 1 .334.348z"/></svg>`;
+  const svgTemplate = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="24" height="24" style="opacity:1;"><path fill="#CFD8DC" d="M6 10a4 4 0 0 1 4-4h28a4 4 0 0 1 4 4v28a4 4 0 0 1-4 4H10a4 4 0 0 1-4-4z"/><path fill="#37474F" d="M39 17.271a.34.34 0 0 1-.334.349h-1.799l-8.164 18.179c-.052.12-.17.2-.297.202h-.004a.33.33 0 0 1-.298-.193l-3.874-8.039l-4.18 8.049a.33.33 0 0 1-.303.184a.34.34 0 0 1-.292-.199l-8.252-18.182h-1.87a.345.345 0 0 1-.333-.35v-.921a.34.34 0 0 1 .333-.35h6.657a.34.34 0 0 1 .333.35v.921a.34.34 0 0 1-.333.349h-1.433l5.696 13.748l2.964-5.793l-3.757-7.953h-.904a.34.34 0 0 1-.333-.35v-.922c0-.191.149-.348.333-.348h4.924a.34.34 0 0 1 .333.348v.922c0 .192-.149.35-.333.35h-.867l2.162 4.948l2.572-4.948H25.77a.34.34 0 0 1-.334-.35v-.922a.34.34 0 0 1 .334-.348h4.784c.187 0 .333.156.333.348v.922a.34.34 0 0 1-.333.35h-1.05l-3.757 7.141l3.063 6.584l5.905-13.725h-1.872a.343.343 0 0 1-.334-.35v-.922c0-.191.15-.348.334-.348h5.822a.34.34 0 0 1 .334.348z"/></svg>`;
 
   return new L.DivIcon({
     className: "test",
-    html: svgTemplate,
-    iconSize: [40, 40],
+    html: `<div role="button" aria-label="Wikipedia article location">${svgTemplate}</div>`,
+    iconSize: [20, 20],
     iconAnchor: [12, 24],
     popupAnchor: [0, -20],
   });
@@ -38,7 +38,7 @@ export function createWikiMarkerIcon() {
 export function createMarkerIcon(
   color = "fff",
   outline = "000",
-  stroke = "0.5"
+  stroke = "0.5",
 ) {
   const svgTemplate = `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="marker">
@@ -48,7 +48,7 @@ export function createMarkerIcon(
 
   return new L.DivIcon({
     className: "test",
-    html: svgTemplate,
+    html: `<div role="button" aria-label="General location marker">${svgTemplate}</div>`,
     iconSize: [40, 40],
     iconAnchor: [12, 24],
     popupAnchor: [7, -16],
@@ -60,7 +60,7 @@ export function createIqMarkerIcon(
   type: string,
   color = "#0070F3", //blue
   outline = "#fff",
-  stroke = "1"
+  stroke = "1",
 ) {
   let svgTemplate;
 
@@ -130,8 +130,8 @@ export function createIqMarkerIcon(
 
   return new L.DivIcon({
     className: "test",
-    html: svgTemplate,
-    iconSize: [40, 40],
+    html: `<div role="button" aria-label="${type} location marker">${svgTemplate}</div>`,
+    iconSize: [20, 20],
     iconAnchor: [12, 24],
     popupAnchor: [0, -16],
   });

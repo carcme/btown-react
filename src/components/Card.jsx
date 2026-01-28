@@ -4,9 +4,13 @@ import { useUserLocation } from "../state/location-provider";
 import { useEffect } from "react";
 import { getCloudImage, getDist } from "@/lib/utils";
 import CloudinaryImage from "./CloudinaryImage";
+import { useIsMobile } from "@/lib/isMobile";
 
 const Card = ({ id, title, desc, brief, type, img, alt, latlng }) => {
   const { location } = useUserLocation();
+
+  const isMobile = useIsMobile();
+  const imageSize = isMobile ? 300 : 800;
 
   useEffect(() => {}, [location]);
 
@@ -31,7 +35,7 @@ const Card = ({ id, title, desc, brief, type, img, alt, latlng }) => {
           <div className="relative">
             <CloudinaryImage
               publicId={img}
-              w={600}
+              w={imageSize}
               alt={alt}
               className="h-60 w-full object-cover object-center"
             />

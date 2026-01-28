@@ -1,6 +1,6 @@
-@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+/* @import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap"); */
 @import url("https://fonts.googleapis.com/css2?family=Spinnaker&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap");
+/* @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk&display=swap"); */
 
 @import "tailwindcss";
 
@@ -18,8 +18,8 @@
   --breakpoint-xs: 20rem;
 
   --font-spinnaker: "Spinnaker", sans-serif;
-  --font-roboto: "Roboto", sans-serif;
-  --font-grotesk: "Space Grotesk", sans-serif;
+  /* --font-roboto: "Roboto", sans-serif; */
+  /* --font-grotesk: "Space Grotesk", sans-serif; */
 
   /* Fade animation */
   @keyframes fadePulse {

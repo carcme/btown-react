@@ -15,7 +15,7 @@ import WikiIcon from "./map/WikiIcon";
 
 export function InfoBox({ infoData }: { infoData: Attraction | undefined }) {
   return (
-    <Card className="w-full max-w-3xl mx-auto font-grotesk  ">
+    <Card className="w-full max-w-3xl mx-auto font-spinnaker  ">
       <CardHeader className="space-y-2">
         <CardTitle className="text-base text-balance font-medium">
           {infoData?.stopName}

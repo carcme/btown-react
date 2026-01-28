@@ -95,7 +95,7 @@ function RouteComponent() {
         </ImageSlider>
       </div>
 
-      <div className="p-4 font-grotesk max-w-4xl mx-auto">
+      <div className="p-4 font-spinnaker max-w-4xl mx-auto">
         <div className="text-2xl">{tour?.tourName}</div>
         <div className="text-lg text-muted-foreground">{tour?.tourDesc}</div>
 
@@ -141,7 +141,7 @@ function RouteComponent() {
             </Button>
           </div>
         )}
-        <div className="text-md text-pretty font-grotesk">
+        <div className="text-md text-pretty font-spinnaker">
           {tour?.tourBrief.map((line, i) => {
             return (
               <p key={i} className="py-2">
