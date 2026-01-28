@@ -110,6 +110,8 @@ function RouteComponent() {
 
   const stopImage = getCloudImage(data?.stopImageFile, 600);
 
+  const wikiMarkerIcon = createWikiMarkerIcon();
+
   useEffect(() => {
     const handleScroll = () => {
       let moving = window.pageYOffset;
@@ -310,7 +312,7 @@ function RouteComponent() {
                             page.coordinates[0].lat,
                             page.coordinates[0].lon,
                           ]}
-                          icon={createWikiMarkerIcon()}
+                          icon={wikiMarkerIcon}
                           riseOnHover={true}
                         >
                           <MapPopup>

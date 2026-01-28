@@ -13,6 +13,7 @@ import { LanguageProvider } from "./state/lang-provider.tsx";
 import { ThemeProvider } from "./state/theme-provider.tsx";
 import "leaflet/dist/leaflet.css";
 import { LocationProvider } from "./state/location-provider.tsx";
+import { TourMapViewProvider } from "./state/show-tour-map-provider.tsx";
 
 // Create a new router instance
 
@@ -44,9 +45,14 @@ if (rootElement && !rootElement.innerHTML) {
       <TanStackQueryProvider.Provider {...TanStackQueryProviderContext}>
         <LanguageProvider defaultLang="en" storageKey="btown-lang">
           <ThemeProvider defaultTheme="dark" storageKey="btown-theme">
-            <LocationProvider>
-              <RouterProvider router={router} />
-            </LocationProvider>
+            <TourMapViewProvider
+              defaultTourMapView="half"
+              storageKey="btown-tour-map-view"
+            >
+              <LocationProvider>
+                <RouterProvider router={router} />
+              </LocationProvider>
+            </TourMapViewProvider>
           </ThemeProvider>
         </LanguageProvider>
       </TanStackQueryProvider.Provider>

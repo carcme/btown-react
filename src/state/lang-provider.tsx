@@ -50,7 +50,7 @@ export const useLanguage = () => {
   const context = useContext(LanguageProviderContext);
 
   if (context === undefined)
-    throw new Error("useLang must be used within a LanguageProvider");
+    throw new Error("useLanguage must be used within a LanguageProvider");
 
   return context;
 };

@@ -18,7 +18,7 @@ const Card = ({ id, title, desc, brief, type, img, alt, latlng }) => {
   // }
 
   return (
-    <div className="p-4 lg:max-w-96 mx-auto">
+    <div className="p-2 lg:max-w-96 mx-auto">
       <div className="border-opacity-60 h-full overflow-hidden rounded-t-xl border border-muted">
         <Link
           to="/tour/$tourId"

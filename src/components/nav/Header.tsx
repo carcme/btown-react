@@ -1,12 +1,14 @@
 import { Link } from "@tanstack/react-router";
 
 import { useState } from "react";
-import { Home, Menu, Network, X } from "lucide-react";
+import { Home, Map, X } from "lucide-react";
+
 
 import ToggleDark from "@/components/nav/ToggleDark";
 import ToggleLanguage from "@/components/nav/ToggleLanguage";
 import { SkylineIcon } from "@/assets/svgIcons";
 import { useTheme } from "@/state/theme-provider";
+import ToggleTourMapBtn from "./ToggleTourMapBtn";
 
 const navItems = {
   logo: {
@@ -17,11 +19,7 @@ const navItems = {
   },
   menu: [
     { title: "Home", url: "/", icon: <Home className="size={20}" /> },
-    {
-      title: "TanStack Query",
-      url: "/demo/tanstack-query",
-      icon: <Network className="size={20}" />,
-    },
+    { title: "Map", url: "viewMap", icon: <Map className="size={20}" /> },
   ],
 };
 export default function Header() {
@@ -32,29 +30,8 @@ export default function Header() {
 
   return (
     <>
-      <header className=" p-2 w-full max-w-4xl mx-auto flex items-center justify-between  text-foreground bg-background">
-        <div className="flex gap-2">
-          <button
-            onClick={() => setIsOpen(true)}
-            className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
-            aria-label="Open menu"
-          >
-            <Menu size={24} />
-          </button>
-          <h1 className="text-xl font-semibold  items-center flex">
-            <Link to="/">
-              <SkylineIcon
-                className="fill-foreground h-7 xs:h-8 sm:h-10"
-                bg={bg}
-              />
-              {/* <img
-                src={navItems.logo.src}
-                alt={navItems.logo.alt}
-                className="h-10 fill-amber-300"
-              /> */}
-            </Link>
-          </h1>
-        </div>
+      <header className=" p-2 px-4 w-full max-w-6xl mx-auto flex items-center justify-between  text-foreground bg-background">
+        <ToggleTourMapBtn />
         <div className="flex justify-end">
           <ToggleDark />
           <ToggleLanguage />
@@ -71,7 +48,7 @@ export default function Header() {
 
           <button
             onClick={() => setIsOpen(false)}
-            className="p-2 hover:bg-gray-800 rounded-lg transition-colors"
+            className="p-2 hover:bg-berlin hover:text-foreground rounded-lg transition-colors duration-300"
             aria-label="Close menu"
           >
             <X size={24} />
@@ -85,20 +62,22 @@ export default function Header() {
                 key={item.title}
                 to={item.url}
                 onClick={() => setIsOpen(false)}
-                className="flex items-center gap-3 p-3 rounded-lg hover:text-foreground transition-colors mb-2"
+                className="flex items-center gap-3 p-3 rounded-lg hover:text-secondary transition-colors mb-2"
                 activeProps={{
                   className:
-                    "flex items-center gap-3 p-3 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition-colors mb-2",
+                    "flex items-center gap-3 p-3 rounded-lg bg-berlin mb-2",
                 }}
               >
-                <div className="text-muted-foreground">{item.icon}</div>
+                <div className="text-shadow-background">{item.icon}</div>
                 <span className="font-medium">{item.title}</span>
               </Link>
             );
           })}
 
-          <ToggleDark />
-          <ToggleLanguage />
+          <div className="justify-end place-items-end space-y-3">
+            <ToggleDark />
+            <ToggleLanguage />
+          </div>
         </nav>
       </aside>
     </>

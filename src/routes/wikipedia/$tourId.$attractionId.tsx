@@ -2,7 +2,7 @@ import { createFileRoute, useLocation, Link } from "@tanstack/react-router";
 import type { WikiPageType } from "@/types/WikiType";
 import { useWikiPages } from "@/state/storeCreate";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Map } from "lucide-react";
 import { useEffect } from "react";
 import { ImageZoom } from "@/components/ui/image-zoom";
 import { useLanguage } from "@/state/lang-provider";
@@ -90,7 +90,21 @@ function WikipediaComponent() {
             </p>
           );
         })}
-
+        <div className="flex justify-end">
+          <Link
+            to="/attractions/$tourId/$attractionId"
+            search={{
+              osm_id: page.pageid.toString(),
+              lat: latlng.lat.toString(),
+              lng: latlng.lng.toString(),
+            }}
+            params={{ tourId, attractionId }}
+          >
+            <Button className="" variant="berlin" size="sm">
+              <Map /> Map
+            </Button>
+          </Link>
+        </div>
         <hr className="my-8" />
 
         <h2 className="text-xl font-bold py-2">Nearby Pages</h2>

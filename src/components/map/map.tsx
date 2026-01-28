@@ -516,18 +516,14 @@ export const SearchNearby = ({
           }
         );
 
-        const places = response.data?.map(
-          (place: LocationIQPlaceType, index: number) => {
-            console.log("🚀 ~ LocationFinderDummy ~ place:", index, place.type);
-            return {
-              ...place,
-              icon: createIqMarkerIcon(theme, place.type),
-            };
-          }
-        );
+        const places = response.data?.map((place: LocationIQPlaceType) => {
+          return {
+            ...place,
+            icon: createIqMarkerIcon(theme, place.type),
+          };
+        });
         onResult(places);
         setLocationIQPlaces(places);
-        console.log("🚀 ~ LocationFinderDummy ~ response:", response.data);
       } catch (err) {
         console.error("Error fetching LocationIQ places:", err);
         onResult(null); // Pass null on error
